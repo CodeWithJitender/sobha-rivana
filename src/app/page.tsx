@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Phone, X } from "lucide-react";
+import { Phone, X, Mail } from "lucide-react";
 import { useState, FormEvent, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import emailjs from "@emailjs/browser";
@@ -67,7 +67,7 @@ export default function Home() {
   const headingRef = useRef<HTMLDivElement>(null);
   const pillsRef = useRef<HTMLDivElement>(null);
   const paraRef = useRef<HTMLDivElement>(null);
-  const mapFrameObj = useRef({ frame: 1 });
+  const mapFrameObj = useRef({ frame: 0 });
 
   useGSAP(() => {
     const canvas = canvasRef.current;
@@ -78,24 +78,32 @@ export default function Home() {
     // Responsive folder and canvas sizing
     const isMobile = window.innerWidth < 1024;
     const folder = isMobile ? "map-mobile" : "map-desktop";
+    const totalFrames = isMobile ? 121 : 303;
+    const maxIndex = totalFrames - 1;
 
     // Set appropriate canvas aspect ratio for mobile vs desktop
     canvas.width = isMobile ? 1080 : 1920;
     canvas.height = isMobile ? 1920 : 1080;
 
     const images: HTMLImageElement[] = [];
-    for (let i = 1; i <= 126; i++) {
+    for (let i = 0; i < totalFrames; i++) {
       const img = new window.Image();
-      const paddedIndex = i.toString().padStart(3, '0');
-      img.src = `/${folder}/ezgif-frame-${paddedIndex}.jpg`;
+      const paddedIndex = i.toString().padStart(5, '0');
+
+      if (isMobile) {
+        img.src = `/${folder}/_Map__${paddedIndex}.webp`;
+      } else {
+        img.src = `/${folder}/Landscape_Map_${paddedIndex}.webp`;
+      }
+
       img.onload = () => {
-        if (i === 1) context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (i === 0) context.drawImage(img, 0, 0, canvas.width, canvas.height);
       };
       images.push(img);
     }
 
     const renderCanvas = () => {
-      const index = Math.min(Math.max(Math.round(mapFrameObj.current.frame) - 1, 0), 125);
+      const index = Math.min(Math.max(Math.round(mapFrameObj.current.frame), 0), maxIndex);
       if (images[index] && images[index].complete) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         context.drawImage(images[index], 0, 0, canvas.width, canvas.height);
@@ -111,7 +119,7 @@ export default function Home() {
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: "+=3000",
+        end: "+=4000",
         pin: true,
         scrub: 1,
         anticipatePin: 1
@@ -120,7 +128,7 @@ export default function Home() {
 
     // 1. Map Animation
     tl.to(mapFrameObj.current, {
-      frame: 126,
+      frame: maxIndex,
       snap: "frame",
       ease: "none",
       duration: 4,
@@ -366,33 +374,34 @@ export default function Home() {
             href="tel:9999991036"
             className="group flex items-center justify-center gap-3 px-8 py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy"
           >
-            <Phone className="w-5 h-5 text-hf-gold group-hover:text-hf-navy transition-colors" />
+            <Phone className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
             <span className="text-[16px] font-light tracking-wide">9999991036</span>
           </a>
           <a
             href="mailto:info@hfrealtors.com"
-            className="flex items-center justify-center px-8 py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy"
+            className="group flex items-center justify-center gap-3 px-8 py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy"
           >
+            <Mail className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
             <span className="text-[16px] font-light tracking-wide">info@hfrealtors.com</span>
           </a>
         </div>
       </header>
 
       {/* Hero Wrapper with Background */}
-      <div className="relative w-full min-h-screen">
+      <div className="relative w-full ">
         {/* Background Image */}
         <div
-          className="absolute inset-0 w-full h-full z-0 bg-[url('/hero-bg.jpg')] bg-cover bg-top"
+          className="absolute inset-0 w-full h-full z-0 bg-[url('/hero-bg.jpg')] bg-cover bg-bottom"
         >
           {/* Subtle dark overlay for text readability, no solid gradients blocking the image */}
           <div className="absolute inset-0 bg-black/30"></div>
         </div>
 
         {/* Hero Layout (Two Columns) */}
-        <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-40 pb-24 flex flex-col lg:flex-row gap-12 items-end lg:items-stretch">
+        <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-40 lg:pt-56 pb-16 lg:pb-24 flex flex-col lg:flex-row gap-12 items-center">
 
           {/* Left Column (Text & Bottom Info Box) */}
-          <div className="flex-1 flex flex-col justify-between w-full pb-12 lg:pb-0 gap-16">
+          <div className="flex-1 flex flex-col justify-between w-full pb-8 lg:pb-0 gap-16 lg:gap-60">
 
             {/* Top Heading */}
             <div className="relative">
@@ -484,10 +493,13 @@ export default function Home() {
       {/* Overview Section */}
       <section className="relative w-full bg-transparent flex flex-col justify-center items-center py-32 border-t border-white/5">
 
-        {/* Building Background Image */}
+        {/* Building Background Image with fade masks */}
         <div className="absolute inset-0 w-full h-full z-0">
-          <div className="w-full h-full bg-[url('/overview.png')] bg-cover bg-center bg-no-repeat opacity-90">
+          <div className="w-full h-full bg-[url('/overview.png')] bg-cover bg-center bg-no-repeat">
           </div>
+          {/* Top & Bottom Fade Masks to blend into background */}
+          <div className="absolute top-0 left-0 w-full h-[200px] bg-gradient-to-b from-[#161F48] via-[#161F48]/80 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-full h-[200px] bg-gradient-to-t from-[#161F48] via-[#161F48]/80 to-transparent z-10 pointer-events-none"></div>
         </div>
 
         {/* Floating Glassmorphic Features */}
@@ -497,41 +509,41 @@ export default function Home() {
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="relative md:absolute md:top-[15%] md:left-[5%] lg:left-[10%] bg-white/10 backdrop-blur-xl border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
+            className="relative md:absolute md:top-[15%] md:left-[5%] lg:left-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-base sm:text-lg md:text-xl font-medium tracking-wide">Sector 1, Greater Noida West</p>
+            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">Sector 1, Greater Noida West</p>
           </motion.div>
 
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="relative md:absolute md:top-[12%] md:right-[5%] lg:right-[10%] bg-white/10 backdrop-blur-xl border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
+            className="relative md:absolute md:top-[12%] md:right-[5%] lg:right-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-base sm:text-lg md:text-xl font-medium tracking-wide">12-acre planned development</p>
+            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">12-acre planned development</p>
           </motion.div>
 
           <motion.div
             animate={{ y: [0, -12, 0] }}
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            className="relative md:absolute md:top-[45%] md:left-[2%] lg:left-[8%] bg-white/10 backdrop-blur-xl border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
+            className="relative md:absolute md:top-[45%] md:left-[2%] lg:left-[8%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-base sm:text-lg md:text-xl font-medium tracking-wide">~1375 apartments with low-density planning</p>
+            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">~1375 apartments with low-density planning</p>
           </motion.div>
 
           <motion.div
             animate={{ y: [0, 12, 0] }}
             transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="relative md:absolute md:top-[50%] md:right-[5%] lg:right-[12%] bg-white/10 backdrop-blur-xl border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
+            className="relative md:absolute md:top-[50%] md:right-[5%] lg:right-[12%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-base sm:text-lg md:text-xl font-medium tracking-wide">8 high-rise towers (G+45)</p>
+            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">8 high-rise towers (G+45)</p>
           </motion.div>
 
           <motion.div
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-            className="relative md:absolute md:bottom-[10%] md:left-1/2 md:-translate-x-1/2 bg-white/10 backdrop-blur-xl border border-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
+            className="relative md:absolute md:bottom-[10%] md:left-1/2 md:-translate-x-1/2 bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-base sm:text-lg md:text-xl font-medium tracking-wide">2, 3, and 4 BHK residences</p>
+            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">2, 3, and 4 BHK residences</p>
           </motion.div>
 
         </div>
@@ -546,45 +558,45 @@ export default function Home() {
 
         {/* Content */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold mb-16 max-w-4xl leading-tight bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold mb-16 max-w-4xl leading-tight text-white">
             Why most luxury homes don&apos;t feel<br className="hidden sm:block" /> premium after possession?
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {/* Item 1 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-1.png" alt="Crowded towers" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">Crowded<br />towers</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-1.png" alt="Crowded towers" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">Crowded<br />towers</p>
             </div>
 
             {/* Item 2 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-2.png" alt="Inconsistent construction quality" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">Inconsistent<br />construction quality</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-2.png" alt="Inconsistent construction quality" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">Inconsistent<br />construction quality</p>
             </div>
 
             {/* Item 3 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-3.png" alt="Overpromised amenities" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">Overpromised<br />amenities</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-3.png" alt="Overpromised amenities" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">Overpromised<br />amenities</p>
             </div>
 
             {/* Item 4 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-4.png" alt="Execution delays" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">Execution<br />delays</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-4.png" alt="Execution delays" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">Execution<br />delays</p>
             </div>
 
             {/* Item 5 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-5.png" alt="On paper, everything looks similar" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">On paper,<br />everything looks similar.</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-5.png" alt="On paper, everything looks similar" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">On paper,<br />everything looks similar.</p>
             </div>
 
             {/* Item 6 */}
-            <div className="bg-[#ffffff08] backdrop-blur-xl border border-white/10 rounded-2xl p-8 flex items-center sm:items-start gap-6 hover:bg-white/10 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.2)]">
-              <Image src="/luxury-homes-icon-6.png" alt="In reality, very few projects deliver consistency" width={48} height={48} className="w-12 h-12 shrink-0 object-contain" />
-              <p className="text-[1.1rem] font-medium leading-snug pt-1">In reality, very few<br />projects deliver consistency.</p>
+            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
+              <Image src="/luxury-homes-icon-6.png" alt="In reality, very few projects deliver consistency" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[1.15rem] font-medium leading-snug text-white">In reality, very few<br />projects deliver consistency.</p>
             </div>
           </div>
         </div>
@@ -595,20 +607,20 @@ export default function Home() {
         {/* Background Pattern */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-10 bg-[url('/get-a-closer-look-bg.png')] bg-cover bg-center"></div>
 
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6">
-          <div className="relative w-full rounded-xl overflow-hidden shadow-2xl group border border-white/10">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
+          <div className="relative w-full rounded-2xl overflow-hidden shadow-2xl group border border-white/10 aspect-square sm:aspect-video lg:aspect-[2.2/1] flex flex-col items-center justify-center">
             {/* Middle Image as Background */}
             <div className="absolute inset-0 w-full h-full">
               <Image src="/get-a-closer.jpg" alt="Layout Plan" fill className="object-cover" />
             </div>
 
-            <div className="relative z-10 py-32 sm:py-48 px-6 flex flex-col items-center justify-center text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold mb-8 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+            <div className="relative z-10 px-6 flex flex-col items-center justify-center text-center">
+              <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-semibold mb-6 text-[#F4D068] drop-shadow-md">
                 Get A Closer Look
               </h2>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-[#4a5fbd] hover:bg-[#3a4ca0] text-white font-medium px-8 py-3 rounded-md transition-colors shadow-lg"
+                className="bg-[#4a5fbd] hover:bg-[#3a4ca0] text-white text-sm sm:text-base font-medium px-8 py-2.5 rounded-lg transition-colors shadow-lg"
               >
                 Download layout
               </button>
@@ -656,10 +668,10 @@ export default function Home() {
           <Slider {...slickSettings}>
             {sliderData.map((slide) => (
               <div key={slide.id} className="outline-none">
-                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-2xl group mx-auto">
+                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto">
                   <Image src={slide.img} alt={slide.text} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div>
-                  <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-xl sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-center">
+                  <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-xl sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">
                     {slide.text}
                   </p>
                 </div>
@@ -855,12 +867,12 @@ export default function Home() {
       {/* Contact Section */}
       <section className="w-full bg-[#161F48] py-16 sm:py-24 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch justify-center">
-          
+
           {/* Left Column (Image & Overlay Text) */}
           <div className="w-full lg:w-1/2 relative min-h-[400px] lg:min-h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10">
             <Image src="/contact.jpg" alt="Living Room" fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/95 via-[#161F48]/30 to-transparent"></div>
-            
+
             <div className="absolute bottom-0 left-0 w-full p-8 sm:p-12">
               <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-snug drop-shadow-lg">
                 A Well-Built Home Is Not Obvious<br />
@@ -873,7 +885,7 @@ export default function Home() {
           {/* Right Column (Form) */}
           <div className="w-full lg:w-5/12 flex flex-col justify-center py-6">
             <form onSubmit={handleContactSubmit} className="flex flex-col gap-6">
-              
+
               <div>
                 <div className="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
                   {!contactData.name && (
@@ -881,10 +893,10 @@ export default function Home() {
                       Name
                     </span>
                   )}
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     value={contactData.name}
-                    onChange={(e) => setContactData({...contactData, name: e.target.value})}
+                    onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
                     className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
                   />
                 </div>
@@ -898,10 +910,10 @@ export default function Home() {
                       Email
                     </span>
                   )}
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     value={contactData.email}
-                    onChange={(e) => setContactData({...contactData, email: e.target.value})}
+                    onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
                     className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
                   />
                 </div>
@@ -915,10 +927,10 @@ export default function Home() {
                       Phone No.
                     </span>
                   )}
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     value={contactData.mobile}
-                    onChange={(e) => setContactData({...contactData, mobile: e.target.value})}
+                    onChange={(e) => setContactData({ ...contactData, mobile: e.target.value })}
                     className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
                   />
                 </div>
@@ -932,9 +944,9 @@ export default function Home() {
                       Fill in your requirements
                     </span>
                   )}
-                  <textarea 
+                  <textarea
                     value={contactData.requirements}
-                    onChange={(e) => setContactData({...contactData, requirements: e.target.value})}
+                    onChange={(e) => setContactData({ ...contactData, requirements: e.target.value })}
                     rows={4}
                     className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors resize-none"
                   />
@@ -943,7 +955,7 @@ export default function Home() {
               </div>
 
               <div className="flex justify-center mt-2">
-                <button 
+                <button
                   type="submit"
                   disabled={isContactSubmitting}
                   className="px-12 py-3.5 bg-[#00474E] hover:bg-[#005e66] text-white font-medium rounded-lg transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed w-48"
@@ -960,7 +972,7 @@ export default function Home() {
 
       {/* Footer Section */}
       <footer className="relative w-full bg-[#161F48] py-12 sm:py-16 px-6 overflow-hidden min-h-[300px] flex items-center">
-        
+
         {/* Layer 1: Giant Watermark Background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center pointer-events-none select-none z-0">
           <span className="text-[140px] sm:text-[200px] md:text-[250px] lg:text-[320px] font-semibold text-[#CCA14D]/30 leading-none tracking-[0.22em] whitespace-nowrap lowercase">
@@ -972,7 +984,7 @@ export default function Home() {
         <div className="absolute bottom-0 left-0 w-full h-[200px] sm:h-[250px] bg-gradient-to-b from-[#161F48]/0 to-[#161F48] pointer-events-none z-0"></div>
 
         <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-between gap-10 lg:gap-6">
-          
+
           {/* Logo */}
           <div className="w-56 sm:w-64 shrink-0 flex justify-center lg:justify-start">
             <Image src="/hf-realtor-logo.png" alt="Head Field Realtors" width={256} height={70} className="w-full h-auto object-contain" />
@@ -990,19 +1002,19 @@ export default function Home() {
           <div className="relative flex gap-5 items-center justify-center shrink-0 py-6">
             <a href="#" className="text-hf-gold hover:text-hf-gold-2 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-8 h-8">
-                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
               </svg>
             </a>
             <a href="#" className="text-hf-gold hover:text-hf-gold-2 transition-colors">
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
-                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
               </svg>
             </a>
             <a href="#" className="text-hf-gold hover:text-hf-gold-2 transition-colors">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-9 h-9">
-                <path d="M21.582,6.186c-0.23-0.86-0.908-1.538-1.768-1.768C18.254,4,12,4,12,4S5.746,4,4.186,4.418 c-0.86,0.23-1.538,0.908-1.768,1.768C2,7.746,2,12,2,12s0,4.254,0.418,5.814c0.23,0.86,0.908,1.538,1.768,1.768 C5.746,20,12,20,12,20s6.254,20,7.814-19.582c0.86-0.23,1.538-0.908,1.768-1.768C22,16.254,22,12,22,12S22,7.746,21.582,6.186z M10,15.464V8.536L16,12L10,15.464z"/>
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
             </a>
           </div>
@@ -1011,13 +1023,14 @@ export default function Home() {
           <div className="flex flex-col gap-4 shrink-0 w-full sm:w-auto">
             <div className="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
               <a href="mailto:info@hfrealtors.com" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-8 py-2.5 text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium w-full lg:w-[240px]">
+                <Mail className="w-5 h-5 shrink-0 text-hf-gold" strokeWidth={2} />
                 info@hfrealtors.com
               </a>
             </div>
-            
+
             <div className="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
               <a href="tel:9999991036" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-8 py-2.5 text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium w-full lg:w-[240px]">
-                <Phone className="w-4 h-4 text-hf-gold" strokeWidth={2} />
+                <Phone className="w-5 h-5 shrink-0 text-hf-gold" strokeWidth={2} />
                 9999991036
               </a>
             </div>
