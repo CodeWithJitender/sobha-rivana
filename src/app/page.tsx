@@ -17,6 +17,26 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
+// Centralized EmailJS Configuration
+// Replace these with your actual credentials
+const EMAILJS_SERVICE_ID = "service_5ukbpwr";
+const EMAILJS_TEMPLATE_ID = "template_9st8lw3";
+const EMAILJS_PUBLIC_KEY = "QpkBmnT4LJ4PGyWTX";
+
+const sendEmail = async (data: { name: string; mobile: string; email: string; message: string }) => {
+  return emailjs.send(
+    EMAILJS_SERVICE_ID,
+    EMAILJS_TEMPLATE_ID,
+    {
+      from_name: data.name,
+      mobile_no: data.mobile,
+      reply_to: data.email,
+      message: data.message,
+    },
+    EMAILJS_PUBLIC_KEY
+  );
+};
+
 export default function Home() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -236,21 +256,12 @@ export default function Home() {
 
     setIsModalSubmitting(true);
     try {
-      const SERVICE_ID = "YOUR_SERVICE_ID";
-      const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-      const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          from_name: modalData.name,
-          mobile_no: modalData.mobile,
-          reply_to: modalData.email,
-          message: "Requested to download layout from Get A Closer Look section",
-        },
-        PUBLIC_KEY
-      );
+      await sendEmail({
+        name: modalData.name,
+        mobile: modalData.mobile,
+        email: modalData.email,
+        message: "Requested to download layout from Get A Closer Look section",
+      });
 
       setIsModalOpen(false);
       setModalData({ name: "", mobile: "", email: "" });
@@ -281,21 +292,12 @@ export default function Home() {
     setIsContactSubmitting(true);
 
     try {
-      const SERVICE_ID = "YOUR_SERVICE_ID";
-      const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-      const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          from_name: contactData.name,
-          mobile_no: contactData.mobile,
-          reply_to: contactData.email,
-          message: contactData.requirements,
-        },
-        PUBLIC_KEY
-      );
+      await sendEmail({
+        name: contactData.name,
+        mobile: contactData.mobile,
+        email: contactData.email,
+        message: contactData.requirements,
+      });
 
       router.push("/thank-you");
     } catch (error) {
@@ -324,23 +326,12 @@ export default function Home() {
     setIsSubmitting(true);
 
     try {
-      // NOTE: Replace these placeholder IDs with your actual EmailJS credentials
-      const SERVICE_ID = "YOUR_SERVICE_ID";
-      const TEMPLATE_ID = "YOUR_TEMPLATE_ID";
-      const PUBLIC_KEY = "YOUR_PUBLIC_KEY";
-
-      // Send via emailjs
-      await emailjs.send(
-        SERVICE_ID,
-        TEMPLATE_ID,
-        {
-          from_name: formData.name,
-          mobile_no: formData.mobile,
-          reply_to: formData.email,
-          message: formData.requirements,
-        },
-        PUBLIC_KEY
-      );
+      await sendEmail({
+        name: formData.name,
+        mobile: formData.mobile,
+        email: formData.email,
+        message: formData.requirements,
+      });
 
       router.push("/thank-you");
     } catch (error) {
