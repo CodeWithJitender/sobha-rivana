@@ -24,3 +24,26 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Centric Slider Custom Styles (Desktop & Tablet only) */
+@media (min-width: 768px) {
+  .centric-slider .slick-slide > div {
+    transition: all 0.5s ease-in-out;
+    transform: scale(0.85);
+    opacity: 0.4;
+    padding: 0 10px;
+  }
+  .centric-slider .slick-center > div {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Mobile specific overrides */
+@media (max-width: 767px) {
+  .centric-slider .slick-slide > div {
+    padding: 0 5px;
+    opacity: 1;
+    transform: scale(1);
+  }
+}

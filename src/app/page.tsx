@@ -61,6 +61,34 @@ export default function Home() {
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState({ name: "", mobile: "", email: "" });
+
+  // Header Scroll State
+  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const lastScrollY = useRef(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > 50) {
+        setHasScrolled(true);
+      } else {
+        setHasScrolled(false);
+      }
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+        setIsHeaderVisible(false); // Scrolling down
+      } else {
+        setIsHeaderVisible(true); // Scrolling up
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   const [modalErrors, setModalErrors] = useState<Record<string, string>>({});
   const [isModalSubmitting, setIsModalSubmitting] = useState(false);
 
@@ -78,15 +106,26 @@ export default function Home() {
   ];
 
   const slickSettings = {
+    className: "centric-slider",
     dots: true,
     infinite: true,
-    speed: 1000,
+    speed: 600,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 4000,
-    fade: true,
+    centerMode: true,
+    centerPadding: "20%",
     arrows: false,
+    responsive: [
+      {
+        breakpoint: 768,
+        settings: {
+          centerMode: false,
+          centerPadding: "0px",
+        }
+      }
+    ]
   };
 
   // Scroll Animation State
@@ -96,7 +135,7 @@ export default function Home() {
   // General Entrance Animations (No ScrollTrigger for the whole page)
   useGSAP(() => {
     // Header
-    gsap.from("header", { y: -50, opacity: 0, duration: 1, ease: "power3.out" });
+    gsap.from("header", { y: -50, opacity: 0, duration: 1, ease: "power3.out", clearProps: "all" });
 
     // Hero Section
     gsap.from(".hero-title", { y: 50, opacity: 0, duration: 1, ease: "power3.out" });
@@ -367,35 +406,37 @@ export default function Home() {
     <main className="font-sans bg-hf-navy text-white overflow-hidden">
 
       {/* Fixed Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full max-w-7xl mx-auto px-6 py-6 sm:py-8 flex flex-col sm:flex-row justify-between items-center gap-6">
-        {/* Logo */}
-        <div className="flex items-center sm:items-start shrink-0">
-          <Image
-            src="/logo.png"
-            alt="Sobha Rivana"
-            width={200}
-            height={80}
-            className="w-auto h-16 object-contain drop-shadow-md"
-            priority
-          />
-        </div>
+      <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${isHeaderVisible ? "translate-y-0" : "-translate-y-full"} ${hasScrolled ? "bg-[#161F48]/95 backdrop-blur-md shadow-lg py-4 sm:py-6" : "bg-transparent py-6 sm:py-8"}`}>
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-row justify-between items-center gap-4 sm:gap-6">
+          {/* Logo */}
+          <div className="flex items-center shrink-0">
+            <Image
+              src="/logo.png"
+              alt="Sobha Rivana"
+              width={200}
+              height={80}
+              className="w-auto h-10 sm:h-16 object-contain drop-shadow-md"
+              priority
+            />
+          </div>
 
-        {/* Contact Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <a
-            href="tel:9999991036"
-            className="group flex items-center justify-center gap-3 px-8 py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy"
-          >
-            <Phone className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
-            <span className="text-[16px] font-light tracking-wide">9999991036</span>
-          </a>
-          <a
-            href="mailto:info@hfrealtors.com"
-            className="group flex items-center justify-center gap-3 px-8 py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy"
-          >
-            <Mail className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
-            <span className="text-[16px] font-light tracking-wide">info@hfrealtors.com</span>
-          </a>
+          {/* Contact Buttons */}
+          <div className="flex flex-row gap-3 sm:gap-4 w-auto">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="group flex items-center justify-center sm:gap-3 p-2.5 sm:px-8 sm:py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy cursor-pointer"
+            >
+              <Phone className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
+              <span className="hidden sm:inline-block text-[14px] sm:text-[16px] font-light tracking-wide">9999991036</span>
+            </button>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="group flex items-center justify-center sm:gap-3 p-2.5 sm:px-8 sm:py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy cursor-pointer"
+            >
+              <Mail className="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" />
+              <span className="hidden sm:inline-block text-[14px] sm:text-[16px] font-light tracking-wide">info@hfrealtors.com</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -410,28 +451,28 @@ export default function Home() {
         </div>
 
         {/* Hero Layout (Two Columns) */}
-        <section className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-40 lg:pt-56 pb-16 lg:pb-24 flex flex-col lg:flex-row gap-12 items-center">
+        <section className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-[200px] sm:pt-40 lg:pt-56 pb-16 lg:pb-24 flex flex-col lg:flex-row gap-12 items-center">
 
           {/* Left Column (Text & Bottom Info Box) */}
           <div className="flex-1 flex flex-col justify-between w-full pb-8 lg:pb-0 gap-16 lg:gap-60">
 
             {/* Top Heading */}
             <div className="relative hero-title">
-              <h1 className="relative z-10 text-4xl sm:text-5xl lg:text-[3.5rem] font-sans font-semibold leading-[1.2] tracking-tight max-w-2xl drop-shadow-lg bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+              <h1 className="relative z-10 text-[28px] sm:text-5xl lg:text-[3.5rem] font-sans font-semibold leading-[1.2] tracking-tight max-w-2xl drop-shadow-lg bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
                 Own a Home Where Quality Is Engineered, Not Promised.
               </h1>
             </div>
 
             {/* Bottom Info Box */}
-            <div className="hero-box bg-white/10 backdrop-blur-md border border-white/20 rounded-[2rem] p-8 max-w-xl shadow-2xl">
-              <p className="text-xl sm:text-2xl font-medium mb-8 leading-snug">
+            <div className="hero-box bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 w-full max-w-xl shadow-2xl">
+              <p className="text-[16px] sm:text-xl md:text-2xl font-medium mb-6 md:mb-8 leading-snug">
                 Low-density high-rise living, backed by a developer that builds everything in-house.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-white text-black font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+                <button onClick={() => setIsModalOpen(true)} className="w-full bg-white text-black font-semibold px-4 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-base rounded-xl hover:bg-gray-100 transition-colors shadow-lg cursor-pointer">
                   Get Price & Availability
                 </button>
-                <button className="bg-white text-black font-semibold px-6 py-3 rounded-xl hover:bg-gray-100 transition-colors shadow-lg">
+                <button onClick={() => setIsModalOpen(true)} className="w-full bg-white text-black font-semibold px-4 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-base rounded-xl hover:bg-gray-100 transition-colors shadow-lg cursor-pointer">
                   Speak to an Advisor
                 </button>
               </div>
@@ -439,18 +480,18 @@ export default function Home() {
           </div>
 
           {/* Right Column (Form) */}
-          <div className="hero-form w-full lg:w-[450px] shrink-0 pb-12 flex items-center lg:items-end">
-            <div className="w-full bg-black/20 backdrop-blur-xl border border-white/20 rounded-[2rem] p-8 shadow-2xl">
-              <h2 className="text-2xl font-semibold text-center mb-6 drop-shadow-md bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Own a Premium Address</h2>
+          <div className="hero-form w-full lg:w-[40%] xl:w-[450px] shrink-0 pb-12 flex items-center lg:items-end">
+            <div className="w-full bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 shadow-2xl">
+              <h2 className="text-[22px] sm:text-2xl font-semibold text-center mb-5 sm:mb-6 drop-shadow-md bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Own a Premium Address</h2>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:gap-4">
                 <div>
                   <input
                     type="text"
                     placeholder="Name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-4 py-3.5 text-white placeholder-white/70 outline-none transition-colors"
+                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                   />
                   {errors.name && <p className="text-red-400 text-sm mt-1 ml-1">{errors.name}</p>}
                 </div>
@@ -461,7 +502,7 @@ export default function Home() {
                     placeholder="Mobile No."
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
-                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-4 py-3.5 text-white placeholder-white/70 outline-none transition-colors"
+                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                   />
                   {errors.mobile && <p className="text-red-400 text-sm mt-1 ml-1">{errors.mobile}</p>}
                 </div>
@@ -472,7 +513,7 @@ export default function Home() {
                     placeholder="Email"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-4 py-3.5 text-white placeholder-white/70 outline-none transition-colors"
+                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                   />
                   {errors.email && <p className="text-red-400 text-sm mt-1 ml-1">{errors.email}</p>}
                 </div>
@@ -483,7 +524,7 @@ export default function Home() {
                     placeholder="Requirements"
                     value={formData.requirements}
                     onChange={(e) => setFormData({ ...formData, requirements: e.target.value })}
-                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-4 py-3.5 text-white placeholder-white/70 outline-none transition-colors"
+                    className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                   />
                   {errors.requirements && <p className="text-red-400 text-sm mt-1 ml-1">{errors.requirements}</p>}
                 </div>
@@ -491,7 +532,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-1/2 mx-auto mt-2 bg-sobha-rivana hover:brightness-110 text-white font-medium py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                  className="w-[80%] sm:w-1/2 mx-auto mt-2 bg-sobha-rivana hover:brightness-110 text-[13px] sm:text-base text-white font-medium py-2.5 sm:py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
@@ -503,7 +544,7 @@ export default function Home() {
       </div>
 
       {/* Overview Section */}
-      <section className="fade-up-section relative w-full bg-transparent flex flex-col justify-center items-center py-32 ">
+      <section className="fade-up-section relative w-full bg-transparent flex flex-col justify-center items-center py-16 md:py-32">
 
         {/* Building Background Image with fade masks */}
         <div className="absolute inset-0 w-full h-full z-0">
@@ -515,7 +556,7 @@ export default function Home() {
         </div>
 
         {/* Floating Glassmorphic Features */}
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center items-center gap-4 min-h-[600px] md:min-h-[800px]">
+        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center items-center gap-4 py-12 md:py-0 min-h-[50vh] md:min-h-[800px]">
           {/* Mobile: stacked layout. Desktop: absolute positioned floating layout */}
 
           <motion.div
@@ -523,7 +564,7 @@ export default function Home() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="relative md:absolute md:top-[55%] md:left-[5%] lg:left-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">Sector 1, Greater Noida West</p>
+            <p className="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">Sector 1, Greater Noida West</p>
           </motion.div>
 
           <motion.div
@@ -531,7 +572,7 @@ export default function Home() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="relative md:absolute md:top-[50%] md:right-[5%] lg:right-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">12-acre planned development</p>
+            <p className="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">12-acre planned development</p>
           </motion.div>
 
           <motion.div
@@ -539,7 +580,7 @@ export default function Home() {
             transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             className="relative md:absolute md:top-[70%] md:left-[2%] lg:left-[8%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">~1375 apartments with low-density planning</p>
+            <p className="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">~1375 apartments with low-density planning</p>
           </motion.div>
 
           <motion.div
@@ -547,7 +588,7 @@ export default function Home() {
             transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="relative md:absolute md:top-[65%] md:right-[5%] lg:right-[12%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">8 high-rise towers (G+45)</p>
+            <p className="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">8 high-rise towers (G+45)</p>
           </motion.div>
 
           <motion.div
@@ -555,84 +596,84 @@ export default function Home() {
             transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
             className="relative md:absolute md:bottom-[5%] md:left-1/2 md:-translate-x-1/2 bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center"
           >
-            <p className="text-white text-sm sm:text-base md:text-lg font-medium tracking-wide">2, 3, and 4 BHK residences</p>
+            <p className="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">2, 3, and 4 BHK residences</p>
           </motion.div>
 
         </div>
       </section>
 
       {/* Problems Section */}
-      <section className="relative w-full py-24 bg-hf-navy  overflow-hidden">
+      <section className="relative w-full py-16 md:py-24 bg-hf-navy overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-40">
           <div className="w-full h-full bg-[url('/architectural-blueprint.png')] bg-cover bg-top bg-no-repeat mix-blend-screen"></div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold mb-16 max-w-4xl leading-tight text-white">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 className="text-[24px] sm:text-4xl lg:text-[2.75rem] font-semibold mb-16 max-w-4xl leading-tight text-white">
             Why most luxury homes don&apos;t feel<br className="hidden sm:block" /> premium after possession?
           </h2>
 
-          <div className="problems-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="problems-grid grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
             {/* Item 1 */}
-            <div data-aos="fade-up" data-aos-delay="0" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-1.png" alt="Crowded towers" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">Crowded<br />towers</p>
+            <div data-aos="fade-up" data-aos-delay="0" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-1.png" alt="Crowded towers" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Crowded<br className="hidden sm:block" /> towers</p>
             </div>
 
             {/* Item 2 */}
-            <div data-aos="fade-up" data-aos-delay="100" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-2.png" alt="Inconsistent construction quality" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">Inconsistent<br />construction quality</p>
+            <div data-aos="fade-up" data-aos-delay="100" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-2.png" alt="Inconsistent construction quality" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Inconsistent<br className="hidden sm:block" /> construction quality</p>
             </div>
 
             {/* Item 3 */}
-            <div data-aos="fade-up" data-aos-delay="200" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-3.png" alt="Overpromised amenities" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">Overpromised<br />amenities</p>
+            <div data-aos="fade-up" data-aos-delay="200" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-3.png" alt="Overpromised amenities" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Overpromised<br className="hidden sm:block" /> amenities</p>
             </div>
 
             {/* Item 4 */}
-            <div data-aos="fade-up" data-aos-delay="0" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-4.png" alt="Execution delays" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">Execution<br />delays</p>
+            <div data-aos="fade-up" data-aos-delay="0" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-4.png" alt="Execution delays" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Execution<br className="hidden sm:block" /> delays</p>
             </div>
 
             {/* Item 5 */}
-            <div data-aos="fade-up" data-aos-delay="100" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-5.png" alt="On paper, everything looks similar" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">On paper,<br />everything looks similar.</p>
+            <div data-aos="fade-up" data-aos-delay="100" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-5.png" alt="On paper, everything looks similar" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">On paper,<br className="hidden sm:block" /> everything looks similar.</p>
             </div>
 
             {/* Item 6 */}
-            <div data-aos="fade-up" data-aos-delay="200" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-8 flex items-center gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl">
-              <Image src="/luxury-homes-icon-6.png" alt="In reality, very few projects deliver consistency" width={56} height={56} className="w-14 h-14 shrink-0 object-contain drop-shadow-md" />
-              <p className="text-[1.15rem] font-medium leading-snug text-white">In reality, very few<br />projects deliver consistency.</p>
+            <div data-aos="fade-up" data-aos-delay="200" className="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <Image src="/luxury-homes-icon-6.png" alt="In reality, very few projects deliver consistency" width={56} height={56} className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p className="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">In reality, very few<br className="hidden sm:block" /> projects deliver consistency.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Get A Closer Look Section */}
-      <section className="closer-look-section relative w-full h-screen min-h-[700px] max-h-[100vh] flex items-center justify-center  overflow-hidden">
+      <section className="closer-look-section relative w-full min-h-[60vh] md:min-h-[700px] py-16 md:py-24 flex items-center justify-center overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-10 bg-[url('/get-a-closer-look-bg.png')] bg-cover bg-top"></div>
 
-        <div className="relative z-10 w-full max-w-6xl mx-auto px-6">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
           <div data-aos="fade-up" className="closer-look-card relative w-full rounded-2xl overflow-hidden shadow-2xl group border border-white/10 aspect-square sm:aspect-video lg:aspect-[2.2/1] flex flex-col items-center justify-center">
             {/* Middle Image as Background */}
             <div className="absolute inset-0 w-full h-full">
               <Image src="/get-a-closer.jpg" alt="Layout Plan" fill className="object-cover" />
             </div>
 
-            <div className="relative z-10 px-6 flex flex-col items-center justify-center text-center">
-              <h2 className="text-3xl sm:text-4xl md:text-[2.75rem] font-semibold mb-6 text-[#F4D068] drop-shadow-md">
+            <div className="relative z-10 px-4 sm:px-6 flex flex-col items-center justify-center text-center">
+              <h2 className="text-[24px] sm:text-4xl md:text-[2.75rem] font-semibold mb-6 text-[#F4D068] drop-shadow-md">
                 Get A Closer Look
               </h2>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-[#4a5fbd] hover:bg-[#3a4ca0] text-white text-sm sm:text-base font-medium px-8 py-2.5 rounded-lg transition-colors shadow-lg"
+                className="bg-[#4a5fbd] hover:bg-[#3a4ca0] text-white text-[14px] sm:text-base font-medium px-4 py-2 sm:px-8 sm:py-2.5 rounded-lg transition-colors shadow-lg"
               >
                 Download layout
               </button>
@@ -642,12 +683,12 @@ export default function Home() {
       </section>
 
       {/* Low Density Section */}
-      <section className="fade-up-section relative w-full py-24 border-t border-white/5 overflow-hidden">
+      <section className="fade-up-section relative w-full py-16 md:py-24 border-t border-white/5 overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-10 bg-[url('/architectural-blueprint.png')] bg-cover bg-center mix-blend-screen"></div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col items-center text-center">
-          <h2 data-aos="fade-down" className="text-3xl sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-16 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+          <h2 data-aos="fade-down" className="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-16 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
             Low Density In A High-Growth<br className="hidden sm:block" /> Market
           </h2>
 
@@ -661,7 +702,7 @@ export default function Home() {
             />
           </div>
 
-          <p data-aos="fade-up" className="text-xl sm:text-2xl font-medium text-white leading-snug">
+          <p data-aos="fade-up" className="text-[14px] sm:text-2xl font-medium text-white leading-snug">
             Space Is No Longer A Given In NCR.<br />
             Here, It Is Planned.
           </p>
@@ -669,21 +710,21 @@ export default function Home() {
       </section>
 
       {/* Daily Living Slider Section */}
-      <section className="fade-up-section relative w-full py-24 bg-[#161F48] overflow-hidden ">
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 mb-16 text-center">
-          <h2 data-aos="fade-down" className="text-3xl sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-6 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+      <section className="fade-up-section relative w-full py-16 md:py-24 bg-[#161F48] overflow-hidden">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-16 text-center">
+          <h2 data-aos="fade-down" className="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-2 sm:mb-6 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
             Built For Daily Living, Not Just<br className="hidden sm:block" /> Brochure Value
           </h2>
         </div>
 
-        <div data-aos="fade-up" className="relative w-full max-w-5xl mx-auto px-4 overflow-hidden py-4">
+        <div data-aos="fade-up" className="relative w-full max-w-[100vw] mx-auto overflow-hidden py-2 sm:py-8">
           <Slider {...slickSettings}>
             {sliderData.map((slide) => (
               <div key={slide.id} className="outline-none">
                 <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto">
                   <Image src={slide.img} alt={slide.text} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div>
-                  <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-xl sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">
+                  <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">
                     {slide.text}
                   </p>
                 </div>
@@ -692,8 +733,8 @@ export default function Home() {
           </Slider>
         </div>
 
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 mt-16 text-center">
-          <p data-aos="fade-up" className="text-xl sm:text-2xl font-medium text-white leading-snug">
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 mt-8 sm:mt-16 text-center">
+          <p data-aos="fade-up" className="text-[14px] sm:text-2xl font-medium text-white leading-snug">
             Everything Is Integrated Within The Development.<br />
             You Don&apos;t Step Out For Basic Lifestyle Needs.
           </p>
@@ -701,7 +742,7 @@ export default function Home() {
       </section>
 
       {/* Scroll Animated Map Section */}
-      <section ref={containerRef} className="relative w-full h-screen bg-[#161F48] overflow-hidden flex flex-col justify-between py-12 sm:py-24">
+      <section ref={containerRef} className="relative w-full min-h-screen bg-[#161F48] overflow-hidden flex flex-col justify-between py-16 md:py-24">
 
         {/* Canvas Background */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-60 mix-blend-screen pointer-events-none">
@@ -712,9 +753,9 @@ export default function Home() {
         {/* Heading - sequence starts here */}
         <div
           ref={headingRef}
-          className="relative z-20 w-full max-w-7xl mx-auto px-6 text-center pointer-events-none mt-10"
+          className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 text-center pointer-events-none mt-10"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+          <h2 className="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
             Positioned In One Of NCR&apos;s Fastest-<br className="hidden sm:block" /> Evolving Residential Corridors
           </h2>
         </div>
@@ -722,7 +763,7 @@ export default function Home() {
         {/* Center Map Items Block */}
         <div
           ref={pillsRef}
-          className="relative z-10 flex-1 flex items-center justify-center w-full max-w-6xl mx-auto px-6 mt-12 pointer-events-none"
+          className="relative z-10 flex-1 flex items-center justify-center w-full max-w-6xl mx-auto px-4 sm:px-6 mt-12 pointer-events-none"
         >
           {/* Desktop Layout for Pins */}
           <div className="hidden lg:flex w-full justify-between items-center relative h-full">
@@ -749,18 +790,18 @@ export default function Home() {
           </div>
 
           {/* Mobile Layout (simplified stack) */}
-          <div className="flex lg:hidden flex-col items-center gap-6 w-full justify-center mt-8 px-2">
-            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-full shadow-xl pointer-events-auto text-center w-auto">
-              <p className="text-white font-medium text-sm sm:text-base whitespace-nowrap">Close to Noida, Delhi, & Ghaziabad</p>
+          <div className="flex lg:hidden flex-col items-center gap-4 w-full justify-center mt-8 px-2">
+            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p className="text-white font-medium text-[14px] sm:text-base">Close to Noida, Delhi, & Ghaziabad</p>
             </div>
-            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-full shadow-xl pointer-events-auto text-center w-auto">
-              <p className="text-white font-medium text-sm sm:text-base whitespace-nowrap">Upcoming metro connectivity nearby</p>
+            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p className="text-white font-medium text-[14px] sm:text-base">Upcoming metro connectivity nearby</p>
             </div>
-            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-full shadow-xl pointer-events-auto text-center w-auto">
-              <p className="text-white font-medium text-sm sm:text-base whitespace-nowrap">Access to FNG Expressway</p>
+            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p className="text-white font-medium text-[14px] sm:text-base">Access to FNG Expressway</p>
             </div>
-            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-full shadow-xl pointer-events-auto text-center w-auto">
-              <p className="text-white font-medium text-sm sm:text-base whitespace-nowrap">Sector 1, Greater Noida West</p>
+            <div className="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p className="text-white font-medium text-[14px] sm:text-base">Sector 1, Greater Noida West</p>
             </div>
           </div>
         </div>
@@ -768,9 +809,9 @@ export default function Home() {
         {/* Bottom Paragraph */}
         <div
           ref={paraRef}
-          className="relative z-20 w-full max-w-4xl mx-auto px-6 text-center mb-10 pointer-events-none"
+          className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center mb-10 pointer-events-none"
         >
-          <p className="text-xl sm:text-2xl lg:text-3xl font-medium text-white leading-snug drop-shadow-md">
+          <p className="text-[14px] sm:text-2xl lg:text-3xl font-medium text-white leading-snug drop-shadow-md">
             This Location Is Driven By Expansion, Not Saturation.<br className="hidden sm:block" />
             That Matters For Both Living And Appreciation.
           </p>
@@ -779,7 +820,7 @@ export default function Home() {
       </section>
 
       {/* We Help Section */}
-      <section ref={helpSectionRef} className="relative w-full bg-[#161F48] overflow-hidden py-16 sm:py-24">
+      <section ref={helpSectionRef} className="relative w-full bg-[#161F48] overflow-hidden py-16 md:py-24">
 
         {/* Background Image */}
         <div className="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-40 mix-blend-screen">
@@ -787,13 +828,13 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-t from-[#161F48] via-transparent to-[#161F48]"></div>
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
           {/* Heading */}
           <div
             ref={helpHeadingRef}
             className="text-center mb-12 lg:mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+            <h2 className="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
               We Help You Choose Within The<br className="hidden sm:block" /> Project, Not Just The Project
             </h2>
           </div>
@@ -802,24 +843,26 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-12 lg:gap-4 max-w-5xl mx-auto">
 
             {/* Left Column (Pills) */}
-            <div ref={helpPillsRef} className="flex flex-col gap-4 lg:gap-6 w-full lg:w-7/12">
-              <div className="w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl lg:ml-8 hover:bg-white/5 transition-colors">
-                <p className="text-white text-sm sm:text-base lg:text-lg font-medium whitespace-nowrap">Unit selection based on yield potential</p>
+            <div ref={helpPillsRef} className="flex flex-col gap-4 lg:gap-6 w-full lg:w-7/12 px-2 sm:px-0">
+              <div className="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-8 hover:bg-white/5 transition-colors">
+                <p className="text-white text-[14px] sm:text-base lg:text-lg font-medium">Unit selection based on yield potential</p>
               </div>
-              <div className="w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl lg:-ml-4 hover:bg-white/5 transition-colors">
-                <p className="text-white text-sm sm:text-base lg:text-lg font-medium whitespace-nowrap">Price benchmarking across towers and phases</p>
+              <div className="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:-ml-4 hover:bg-white/5 transition-colors">
+                <p className="text-white text-[14px] sm:text-base lg:text-lg font-medium">Price benchmarking across towers and phases</p>
               </div>
-              <div className="w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl lg:ml-2 hover:bg-white/5 transition-colors">
-                <p className="text-white text-sm sm:text-base lg:text-lg font-medium whitespace-nowrap">Future value and resale positioning</p>
+              <div className="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-2 hover:bg-white/5 transition-colors">
+                <p className="text-white text-[14px] sm:text-base lg:text-lg font-medium">Future value and resale positioning</p>
               </div>
-              <div className="w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl lg:ml-12 hover:bg-white/5 transition-colors">
-                <p className="text-white text-sm sm:text-base lg:text-lg font-medium whitespace-nowrap">End-to-end support till closure</p>
+              <div className="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-12 hover:bg-white/5 transition-colors">
+                <p className="text-white text-[14px] sm:text-base lg:text-lg font-medium">End-to-end support till closure</p>
               </div>
             </div>
 
             {/* Right Column (Image) */}
-            <div className="w-full lg:w-5/12 flex justify-center lg:justify-start relative mt-8 lg:mt-0 lg:-ml-8">
-              <img ref={helpImageRef} src="/we-help-right.png" alt="Real Estate Agents" className="object-contain max-h-[450px] w-auto drop-shadow-2xl" />
+            <div className="w-full lg:w-5/12 flex justify-center lg:justify-start relative mt-8 lg:mt-0 lg:-ml-8 px-6 sm:px-0">
+              <img ref={helpImageRef} src="/we-help-right.png" alt="Real Estate Agents" className="object-contain w-[80%] sm:w-[60%] lg:w-full h-auto drop-shadow-2xl relative z-10" />
+              {/* Full Width Gradient Mask for Image Baseline */}
+              <div className="absolute bottom-[-2px] left-[-100vw] right-[-100vw] h-24 sm:h-40 bg-gradient-to-t from-[#161F48] via-[#161F48]/80 to-transparent pointer-events-none z-20"></div>
             </div>
           </div>
 
@@ -828,7 +871,7 @@ export default function Home() {
             ref={helpParaRef}
             className="text-center mt-12 lg:mt-16"
           >
-            <p className="text-xl sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
+            <p className="text-[14px] sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
               No Generic Recommendations.<br className="hidden sm:block" />
               Only What Fits Your Objective.
             </p>
@@ -838,25 +881,25 @@ export default function Home() {
       </section>
 
       {/* Decisions Matter Section */}
-      <section className="decisions-section w-full bg-[#161F48] py-16 sm:py-24 flex flex-col items-center justify-center overflow-hidden">
+      <section className="decisions-section w-full bg-[#161F48] py-16 md:py-24 flex flex-col items-center justify-center overflow-hidden">
         {/* Heading */}
-        <div data-aos="fade-down" className="decisions-content text-center px-6 mb-8 max-w-5xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-[2.5rem] font-semibold text-white leading-tight">
+        <div data-aos="fade-down" className="decisions-content text-center px-4 sm:px-6 mb-8 max-w-5xl mx-auto">
+          <h2 className="text-[24px] sm:text-3xl lg:text-[2.5rem] font-semibold text-white leading-tight">
             If You Are Considering Sobha Rivana, Early<br className="hidden sm:block" /> Decisions Matter.
           </h2>
         </div>
 
         {/* Buttons */}
-        <div data-aos="fade-up" className="decisions-content flex flex-col sm:flex-row gap-4 sm:gap-6  px-6 z-10 relative">
+        <div data-aos="fade-up" className="decisions-content flex flex-col sm:flex-row gap-4 sm:gap-6 px-4 sm:px-6 z-10 relative">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-8 py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-sm sm:text-base w-full sm:w-auto min-w-[160px]"
+            className="px-4 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-[14px] sm:text-base w-full sm:w-auto min-w-[160px]"
           >
             Get Pricing
           </button>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-8 py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-sm sm:text-base w-full sm:w-auto min-w-[160px]"
+            className="px-4 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-[14px] sm:text-base w-full sm:w-auto min-w-[160px]"
           >
             Schedule a call
           </button>
@@ -868,8 +911,8 @@ export default function Home() {
         </div>
 
         {/* Bottom Text */}
-        <div data-aos="fade-up" className="decisions-content text-center px-6 mt-12 z-10 relative">
-          <p className="text-xl sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
+        <div data-aos="fade-up" className="decisions-content text-center px-4 sm:px-6 mt-12 z-10 relative">
+          <p className="text-[14px] sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
             No Generic Recommendations.<br className="hidden sm:block" />
             Only What Fits Your Objective.
           </p>
@@ -877,7 +920,7 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section className="contact-section w-full bg-[#161F48] py-16 sm:py-24 px-6 border-t border-white/5">
+      <section className="contact-section w-full bg-[#161F48] py-16 md:py-24 px-4 sm:px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch justify-center">
 
           {/* Left Column (Image & Overlay Text) */}
@@ -885,8 +928,8 @@ export default function Home() {
             <Image src="/contact.jpg" alt="Living Room" fill className="object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/95 via-[#161F48]/30 to-transparent"></div>
 
-            <div className="absolute bottom-0 left-0 w-full p-8 sm:p-12">
-              <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-snug drop-shadow-lg">
+            <div className="absolute bottom-0 left-0 w-full px-4 py-4 sm:p-12">
+              <h3 className="text-[24px] sm:text-3xl lg:text-4xl font-semibold text-white leading-snug drop-shadow-lg">
                 A Well-Built Home Is Not Obvious<br />
                 On Day One.<br />
                 It Becomes Clear Over Time.
@@ -896,12 +939,12 @@ export default function Home() {
 
           {/* Right Column (Form) */}
           <div data-aos="fade-left" className="contact-form w-full lg:w-5/12 flex flex-col justify-center py-6">
-            <form onSubmit={handleContactSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleContactSubmit} className="flex flex-col gap-3 sm:gap-6">
 
               <div>
                 <div className="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
                   {!contactData.name && (
-                    <span className="absolute left-[21px] top-[17px] pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                    <span className="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
                       Name
                     </span>
                   )}
@@ -909,7 +952,7 @@ export default function Home() {
                     type="text"
                     value={contactData.name}
                     onChange={(e) => setContactData({ ...contactData, name: e.target.value })}
-                    className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
+                    className="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
                   />
                 </div>
                 {contactErrors.name && <p className="text-red-400 text-sm mt-1.5 ml-1">{contactErrors.name}</p>}
@@ -918,7 +961,7 @@ export default function Home() {
               <div>
                 <div className="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
                   {!contactData.email && (
-                    <span className="absolute left-[21px] top-[17px] pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                    <span className="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
                       Email
                     </span>
                   )}
@@ -926,7 +969,7 @@ export default function Home() {
                     type="email"
                     value={contactData.email}
                     onChange={(e) => setContactData({ ...contactData, email: e.target.value })}
-                    className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
+                    className="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
                   />
                 </div>
                 {contactErrors.email && <p className="text-red-400 text-sm mt-1.5 ml-1">{contactErrors.email}</p>}
@@ -935,7 +978,7 @@ export default function Home() {
               <div>
                 <div className="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
                   {!contactData.mobile && (
-                    <span className="absolute left-[21px] top-[17px] pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                    <span className="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
                       Phone No.
                     </span>
                   )}
@@ -943,7 +986,7 @@ export default function Home() {
                     type="tel"
                     value={contactData.mobile}
                     onChange={(e) => setContactData({ ...contactData, mobile: e.target.value })}
-                    className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors"
+                    className="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
                   />
                 </div>
                 {contactErrors.mobile && <p className="text-red-400 text-sm mt-1.5 ml-1">{contactErrors.mobile}</p>}
@@ -952,7 +995,7 @@ export default function Home() {
               <div>
                 <div className="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
                   {!contactData.requirements && (
-                    <span className="absolute left-[21px] top-[17px] pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                    <span className="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
                       Fill in your requirements
                     </span>
                   )}
@@ -960,7 +1003,7 @@ export default function Home() {
                     value={contactData.requirements}
                     onChange={(e) => setContactData({ ...contactData, requirements: e.target.value })}
                     rows={4}
-                    className="w-full block bg-[#161F48] rounded-[11px] px-5 py-4 text-white outline-none transition-colors resize-none"
+                    className="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors resize-none"
                   />
                 </div>
                 {contactErrors.requirements && <p className="text-red-400 text-sm mt-1.5 ml-1">{contactErrors.requirements}</p>}
@@ -970,7 +1013,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={isContactSubmitting}
-                  className="px-12 py-3.5 bg-[#00474E] hover:bg-[#005e66] text-white font-medium rounded-lg transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed w-48"
+                  className="px-4 py-2 sm:px-12 sm:py-3.5 bg-[#00474E] hover:bg-[#005e66] text-white text-[13px] sm:text-base font-medium rounded-lg transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-48"
                 >
                   {isContactSubmitting ? "Submitting..." : "Submit"}
                 </button>
@@ -983,12 +1026,12 @@ export default function Home() {
       </section>
 
       {/* Footer Section */}
-      <footer className="fade-up-section relative w-full bg-[#161F48] py-12 sm:py-16 px-6 overflow-hidden min-h-[300px] flex items-center">
+      <footer className="fade-up-section relative w-full bg-[#161F48] pt-12 pb-24 sm:pt-16 sm:pb-32 px-4 sm:px-6 overflow-hidden min-h-[300px] flex items-center">
 
         {/* Layer 1: Giant Watermark Background */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center pointer-events-none select-none z-0">
-          <span className="text-[140px] sm:text-[200px] md:text-[250px] lg:text-[320px] font-semibold text-[#CCA14D]/30 leading-none tracking-[0.22em] whitespace-nowrap lowercase">
-            realtor
+          <span className="text-[14vw] sm:text-[160px] md:text-[200px] lg:text-[280px] font-semibold text-[#CCA14D]/30 leading-none tracking-[0.22em] whitespace-nowrap lowercase">
+            realtors
           </span>
         </div>
 
@@ -1004,10 +1047,10 @@ export default function Home() {
 
           {/* Links */}
           <nav className="flex flex-col gap-2 items-center lg:items-start text-center lg:text-left shrink-0">
-            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-sm sm:text-base font-medium">About Head Field</a>
-            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-sm sm:text-base font-medium">Our Expertise</a>
-            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-sm sm:text-base font-medium">Our Approach</a>
-            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-sm sm:text-base font-medium">Contact</a>
+            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">About Head Field</a>
+            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Our Expertise</a>
+            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Our Approach</a>
+            <a href="#" className="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Contact</a>
           </nav>
 
           {/* Social Icons */}
@@ -1034,14 +1077,14 @@ export default function Home() {
           {/* Contact Pills */}
           <div className="flex flex-col gap-4 shrink-0 w-full sm:w-auto">
             <div className="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
-              <a href="mailto:info@hfrealtors.com" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-8 py-2.5 text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium w-full lg:w-[240px]">
+              <a href="mailto:info@hfrealtors.com" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-4 py-2 sm:px-8 sm:py-2.5 text-white/90 hover:text-white transition-colors text-[14px] sm:text-base font-medium w-full lg:w-[240px]">
                 <Mail className="w-5 h-5 shrink-0 text-hf-gold" strokeWidth={2} />
                 info@hfrealtors.com
               </a>
             </div>
 
             <div className="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
-              <a href="tel:9999991036" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-8 py-2.5 text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium w-full lg:w-[240px]">
+              <a href="tel:9999991036" className="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-4 py-2 sm:px-8 sm:py-2.5 text-white/90 hover:text-white transition-colors text-[14px] sm:text-base font-medium w-full lg:w-[240px]">
                 <Phone className="w-5 h-5 shrink-0 text-hf-gold" strokeWidth={2} />
                 9999991036
               </a>
@@ -1054,24 +1097,24 @@ export default function Home() {
       {/* Modal Overlay */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
-          <div className="relative w-full max-w-md bg-[#161F48] border border-white/10 rounded-2xl p-8 shadow-2xl">
+          <div className="relative w-full max-w-md bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 shadow-2xl">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors"
+              className="absolute z-3 top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-300 cursor-pointer"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-2xl font-semibold text-center mb-6 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Download Layout</h3>
+            <h2 className="text-[22px] sm:text-2xl font-semibold text-center mt-6 sm:mt-0 mb-5 sm:mb-6 px-4 sm:px-0 drop-shadow-md bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Own a Premium Address</h2>
 
-            <form onSubmit={handleModalSubmit} className="flex flex-col gap-4">
+            <form onSubmit={handleModalSubmit} className="flex flex-col gap-3 sm:gap-4">
               <div>
                 <input
                   type="text"
                   placeholder="Name"
                   value={modalData.name}
                   onChange={(e) => setModalData({ ...modalData, name: e.target.value })}
-                  className="w-full bg-black/20 border border-white/20 focus:border-white/50 rounded-xl px-4 py-3.5 text-white placeholder-white/50 outline-none transition-colors"
+                  className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                 />
                 {modalErrors.name && <p className="text-red-400 text-sm mt-1 ml-1">{modalErrors.name}</p>}
               </div>
@@ -1082,7 +1125,7 @@ export default function Home() {
                   placeholder="Mobile No."
                   value={modalData.mobile}
                   onChange={(e) => setModalData({ ...modalData, mobile: e.target.value })}
-                  className="w-full bg-black/20 border border-white/20 focus:border-white/50 rounded-xl px-4 py-3.5 text-white placeholder-white/50 outline-none transition-colors"
+                  className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                 />
                 {modalErrors.mobile && <p className="text-red-400 text-sm mt-1 ml-1">{modalErrors.mobile}</p>}
               </div>
@@ -1093,7 +1136,7 @@ export default function Home() {
                   placeholder="Email"
                   value={modalData.email}
                   onChange={(e) => setModalData({ ...modalData, email: e.target.value })}
-                  className="w-full bg-black/20 border border-white/20 focus:border-white/50 rounded-xl px-4 py-3.5 text-white placeholder-white/50 outline-none transition-colors"
+                  className="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
                 />
                 {modalErrors.email && <p className="text-red-400 text-sm mt-1 ml-1">{modalErrors.email}</p>}
               </div>
@@ -1101,7 +1144,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={isModalSubmitting}
-                className="w-full mt-2 bg-[#00474E] hover:brightness-110 text-white font-medium py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-[80%] sm:w-1/2 mx-auto mt-2 bg-sobha-rivana hover:brightness-110 text-[13px] sm:text-base text-white font-medium py-2.5 sm:py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isModalSubmitting ? "Submitting..." : "Submit"}
               </button>
