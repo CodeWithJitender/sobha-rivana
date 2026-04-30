@@ -119,8 +119,10 @@ export default function Home() {
     arrows: false,
     responsive: [
       {
-        breakpoint: 768,
+        breakpoint: 1024,
         settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
           centerMode: false,
           centerPadding: "0px",
         }
@@ -161,11 +163,48 @@ export default function Home() {
     const totalFrames = isMobile ? 121 : 303;
     const maxIndex = totalFrames - 1;
 
-    // Set appropriate canvas aspect ratio for mobile vs desktop
+    // Set default canvas aspect ratio (will be overridden by first image loaded)
     canvas.width = isMobile ? 1080 : 1920;
     canvas.height = isMobile ? 1920 : 1080;
 
     const images: HTMLImageElement[] = [];
+
+    const renderCanvas = () => {
+      const index = Math.min(Math.max(Math.round(mapFrameObj.current.frame), 0), maxIndex);
+      const img = images[index];
+      if (img && img.complete) {
+        const rect = canvas.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          if (canvas.width !== rect.width || canvas.height !== rect.height) {
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+          }
+        }
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (img.naturalWidth && img.naturalHeight) {
+          const imgRatio = img.naturalWidth / img.naturalHeight;
+          const canvasRatio = canvas.width / canvas.height;
+          let drawWidth = canvas.width;
+          let drawHeight = canvas.height;
+          let offsetX = 0;
+          let offsetY = 0;
+
+          if (imgRatio > canvasRatio) {
+            drawWidth = canvas.height * imgRatio;
+            offsetX = (canvas.width - drawWidth) / 2;
+          } else {
+            drawHeight = canvas.width / imgRatio;
+            offsetY = (canvas.height - drawHeight) / 2;
+          }
+          context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+        } else {
+          context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+      }
+    };
+
     for (let i = 0; i < totalFrames; i++) {
       const img = new window.Image();
       const paddedIndex = i.toString().padStart(5, '0');
@@ -177,18 +216,12 @@ export default function Home() {
       }
 
       img.onload = () => {
-        if (i === 0) context.drawImage(img, 0, 0, canvas.width, canvas.height);
+        if (i === 0) renderCanvas();
       };
       images.push(img);
     }
-
-    const renderCanvas = () => {
-      const index = Math.min(Math.max(Math.round(mapFrameObj.current.frame), 0), maxIndex);
-      if (images[index] && images[index].complete) {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.drawImage(images[index], 0, 0, canvas.width, canvas.height);
-      }
-    };
+    
+    window.addEventListener("resize", renderCanvas);
 
     // Initialize GSAP states
     gsap.set(headingRef.current, { opacity: 0, y: 50 });
@@ -199,7 +232,7 @@ export default function Home() {
       scrollTrigger: {
         trigger: containerRef.current,
         start: "top top",
-        end: "+=4000",
+        end: isMobile ? "+=1500" : "+=3000",
         pin: true,
         scrub: true
       }
@@ -542,8 +575,19 @@ export default function Home() {
         </section>
       </div>
 
+      {/* Mobile Overview Image */}
+      <section data-aos="fade-up" data-aos-duration="1000" className="w-full md:hidden flex justify-center items-center pointer-events-none overflow-hidden">
+        <motion.div
+          animate={{ scale: [1, 1.04, 1] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="w-full"
+        >
+          <Image src="/overview-mobile.jpg" alt="Sobha Rivana Overview" width={1080} height={1080} className="w-full h-auto object-cover" />
+        </motion.div>
+      </section>
+
       {/* Overview Section */}
-      <section className="fade-up-section relative w-full bg-transparent flex flex-col justify-center items-center py-16 md:py-32">
+      <section className="fade-up-section relative w-full bg-transparent hidden md:flex flex-col justify-center items-center py-16 md:py-32">
 
         {/* Building Background Image with fade masks */}
         <div className="absolute inset-0 w-full h-full z-0">
@@ -741,7 +785,7 @@ export default function Home() {
       </section>
 
       {/* Scroll Animated Map Section */}
-      <section ref={containerRef} className="relative w-full min-h-screen bg-[#161F48] overflow-hidden flex flex-col justify-between py-16 md:py-24">
+      <section ref={containerRef} className="relative w-full min-h-screen bg-[#161F48] overflow-hidden flex flex-col justify-center items-center gap-6 sm:gap-12 py-16 md:py-24">
 
         {/* Canvas Background */}
         <div className="absolute inset-0 w-full h-full z-0 opacity-60 mix-blend-screen pointer-events-none">
@@ -752,7 +796,7 @@ export default function Home() {
         {/* Heading - sequence starts here */}
         <div
           ref={headingRef}
-          className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 text-center pointer-events-none mt-10"
+          className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 text-center pointer-events-none mt-4 sm:mt-10"
         >
           <h2 className="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
             Positioned In One Of NCR&apos;s Fastest-<br className="hidden sm:block" /> Evolving Residential Corridors
@@ -762,7 +806,7 @@ export default function Home() {
         {/* Center Map Items Block */}
         <div
           ref={pillsRef}
-          className="relative z-10 flex-1 flex items-center justify-center w-full max-w-6xl mx-auto px-4 sm:px-6 mt-12 pointer-events-none"
+          className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pointer-events-none"
         >
           {/* Desktop Layout for Pins */}
           <div className="hidden lg:flex w-full justify-between items-center relative h-full">
@@ -808,7 +852,7 @@ export default function Home() {
         {/* Bottom Paragraph */}
         <div
           ref={paraRef}
-          className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center mb-10 pointer-events-none"
+          className="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center mb-4 sm:mb-10 pointer-events-none"
         >
           <p className="text-[14px] sm:text-2xl lg:text-3xl font-medium text-white leading-snug drop-shadow-md">
             This Location Is Driven By Expansion, Not Saturation.<br className="hidden sm:block" />
