@@ -201,8 +201,7 @@ export default function Home() {
         start: "top top",
         end: "+=4000",
         pin: true,
-        scrub: 1,
-        anticipatePin: 1
+        scrub: true
       }
     });
 
@@ -213,7 +212,7 @@ export default function Home() {
       ease: "none",
       duration: 4,
       onUpdate: renderCanvas
-    });
+    }, 0);
 
     // 2. Heading Fades In
     tl.to(headingRef.current, {
@@ -221,7 +220,7 @@ export default function Home() {
       y: 0,
       duration: 1.5,
       ease: "power2.out"
-    });
+    }, 0);
 
     // 3. Text Boxes Fades In
     tl.to(pillsRef.current, {
@@ -229,7 +228,7 @@ export default function Home() {
       y: 0,
       duration: 2.0,
       ease: "power2.out"
-    });
+    }, 0.5);
 
     // 4. Paragraph Fades In
     tl.to(paraRef.current, {
@@ -237,7 +236,7 @@ export default function Home() {
       y: 0,
       duration: 2.0,
       ease: "power2.out"
-    });
+    }, 1.0);
 
     tl.to({}, { duration: 0.5 });
 
