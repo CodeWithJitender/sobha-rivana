@@ -105,7 +105,7 @@ export default function Home() {
     { id: 4, img: "/daily-living-slider-4.jpg", text: "Sports Courts, Kids' Areas, And Leisure Spaces" },
   ];
 
-  const slickSettings = {
+  const desktopSlickSettings = {
     className: "centric-slider",
     dots: true,
     infinite: true,
@@ -117,17 +117,18 @@ export default function Home() {
     centerMode: true,
     centerPadding: "20%",
     arrows: false,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          centerMode: false,
-          centerPadding: "0px",
-        }
-      }
-    ]
+  };
+
+  const mobileSlickSettings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    centerMode: false,
+    arrows: false,
   };
 
   // Scroll Animation State
@@ -760,20 +761,40 @@ export default function Home() {
           </h2>
         </div>
 
-        <div data-aos="fade-up" className="relative w-full max-w-[100vw] mx-auto overflow-hidden py-2 sm:py-8">
-          <Slider {...slickSettings}>
-            {sliderData.map((slide) => (
-              <div key={slide.id} className="outline-none">
-                <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto">
-                  <Image src={slide.img} alt={slide.text} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div>
-                  <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">
-                    {slide.text}
-                  </p>
+        <div data-aos="fade-up" className="relative w-full max-w-[100vw] mx-auto overflow-hidden py-2 sm:py-8 px-2 md:px-0">
+          {/* Desktop Slider */}
+          <div className="hidden md:block">
+            <Slider {...desktopSlickSettings}>
+              {sliderData.map((slide) => (
+                <div key={slide.id} className="outline-none">
+                  <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto">
+                    <Image src={slide.img} alt={slide.text} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div>
+                    <p className="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">
+                      {slide.text}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          </div>
+
+          {/* Mobile Slider */}
+          <div className="block md:hidden">
+            <Slider {...mobileSlickSettings}>
+              {sliderData.map((slide) => (
+                <div key={`mobile-${slide.id}`} className="outline-none">
+                  <div className="relative aspect-[4/3] w-full rounded-2xl overflow-hidden group mx-auto">
+                    <Image src={slide.img} alt={slide.text} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div>
+                    <p className="absolute bottom-6 left-6 right-6 text-white font-semibold text-[16px] leading-snug drop-shadow-md z-10 text-left">
+                      {slide.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
         </div>
 
         <div className="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 mt-8 sm:mt-16 text-center">
