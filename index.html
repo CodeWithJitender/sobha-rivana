@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobha Rivana - Luxury Residences</title>
+    <meta name="description" content="Experience unparalleled luxury living at Sobha Rivana.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AOS CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Slick CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./style.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'hf-navy': '#161F48',
+                        'hf-royal-blue': '#163548',
+                        'hf-gold': '#CCA14D',
+                        'hf-offwhite': '#EDEDED',
+                        'hf-gold-2': '#FFED7E',
+                        'sobha-rivana': '#00474E',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-full flex flex-col font-sans bg-[#161F48] text-white">
+
+<main class="font-sans bg-hf-navy text-white overflow-x-hidden">
+
+      <!-- Fixed Header -->
+      <header id="site-header" class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 translate-y-0 bg-transparent py-6 sm:py-8">
+        <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-row justify-between items-center gap-4 sm:gap-6">
+          <!-- Logo -->
+          <div class="flex items-center shrink-0">
+            <img src="./public/logo.png" alt="Sobha Rivana" class="w-auto h-10 sm:h-16 object-contain drop-shadow-md" />
+          </div>
+
+          <!-- Contact Buttons -->
+          <div class="flex flex-row gap-3 sm:gap-4 w-auto">
+            <button
+              class="modal-open group flex items-center justify-center sm:gap-3 p-2.5 sm:px-8 sm:py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy cursor-pointer"
+            >
+              <i data-lucide="phone"  class="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" ></i>
+              <span class="hidden sm:inline-block text-[14px] sm:text-[16px] font-light tracking-wide">9999991036</span>
+            </button>
+            <button
+              class="modal-open group flex items-center justify-center sm:gap-3 p-2.5 sm:px-8 sm:py-3 rounded-full border border-hf-gold bg-hf-navy/80 backdrop-blur-sm text-white transition-all duration-300 hover:bg-hf-gold hover:text-hf-navy cursor-pointer"
+            >
+              <i data-lucide="mail"  class="w-5 h-5 shrink-0 text-hf-gold group-hover:text-hf-navy transition-colors" ></i>
+              <span class="hidden sm:inline-block text-[14px] sm:text-[16px] font-light tracking-wide">info@hfrealtors.com</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Hero Wrapper with Background -->
+      <div class="relative w-full ">
+        <!-- Background Image -->
+        <div
+          class="absolute inset-0 w-full h-full z-0 bg-[url('./public/hero-bg.jpg')] bg-cover bg-bottom"
+        >
+          <!-- Subtle dark overlay for text readability, no solid gradients blocking the image -->
+          <div class="absolute inset-0 bg-black/30"></div>
+        </div>
+
+        <!-- Hero Layout (Two Columns) -->
+        <section class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 pt-[200px] sm:pt-40 lg:pt-56 pb-16 lg:pb-24 flex flex-col lg:flex-row gap-12 items-center">
+
+          <!-- Left Column (Text & Bottom Info Box) -->
+          <div class="flex-1 flex flex-col justify-between w-full pb-8 lg:pb-0 gap-16 lg:gap-60">
+
+            <!-- Top Heading -->
+            <div class="relative hero-title">
+              <h1 class="relative z-10 text-[28px] sm:text-5xl lg:text-[3.5rem] font-sans font-semibold leading-[1.2] tracking-tight max-w-2xl drop-shadow-lg bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                Own a Home Where Quality Is Engineered, Not Promised.
+              </h1>
+            </div>
+
+            <!-- Bottom Info Box -->
+            <div class="hero-box bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 w-full max-w-xl shadow-2xl">
+              <p class="text-[16px] sm:text-xl md:text-2xl font-medium mb-6 md:mb-8 leading-snug">
+                Low-density high-rise living, backed by a developer that builds everything in-house.
+              </p>
+              <div class="flex flex-col sm:flex-row gap-4">
+                <button class="modal-open w-full bg-white text-black font-semibold px-4 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-base rounded-xl hover:bg-gray-100 transition-colors shadow-lg cursor-pointer">
+                  Get Price & Availability
+                </button>
+                <button class="modal-open w-full bg-white text-black font-semibold px-4 py-2.5 sm:px-6 sm:py-3 text-[13px] sm:text-base rounded-xl hover:bg-gray-100 transition-colors shadow-lg cursor-pointer">
+                  Speak to an Advisor
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (Form) -->
+          <div class="hero-form w-full lg:w-[40%] xl:w-[450px] shrink-0 pb-12 flex items-center lg:items-end" id="hero-form">
+            <div class="w-full bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 shadow-2xl">
+              <h2 class="text-[22px] sm:text-2xl font-semibold text-center mb-5 sm:mb-6 drop-shadow-md bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Own a Premium Address</h2>
+
+              <form class="flex flex-col gap-3 sm:gap-4">
+                <div>
+                  <input
+                    type="text"
+                    id="hero-name"
+                    placeholder="Name"
+                    class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                  />
+                  
+                </div>
+
+                <div>
+                  <input
+                    type="tel"
+                    id="hero-mobile"
+                    placeholder="Mobile No."
+                    class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                  />
+                  
+                </div>
+
+                <div>
+                  <input
+                    type="email"
+                    id="hero-email"
+                    placeholder="Email"
+                    class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                  />
+                  
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    id="hero-requirements"
+                    placeholder="Requirements"
+                    class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                  />
+                  
+                </div>
+
+                <button
+                  type="submit"
+                  class="w-[80%] sm:w-1/2 mx-auto mt-2 bg-sobha-rivana hover:brightness-110 text-[13px] sm:text-base text-white font-medium py-2.5 sm:py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+
+        </section>
+      </div>
+
+      <!-- Mobile Overview Image -->
+      <section data-aos="fade-up" data-aos-duration="1000" class="w-full md:hidden flex justify-center items-center pointer-events-none overflow-hidden">
+        <div class="anim-breathe w-full">
+          <img src="./public/overview-mobile.jpg" alt="Sobha Rivana Overview" class="w-full h-auto object-cover" />
+        </div>
+      </section>
+
+      <!-- Overview Section -->
+      <section class="fade-up-section relative w-full bg-transparent hidden md:flex flex-col justify-center items-center py-16 md:py-32">
+
+        <!-- Building Background Image with fade masks -->
+        <div class="absolute inset-0 w-full h-full z-0">
+          <div class="w-full h-full bg-[url('./public/overview.png')] bg-cover bg-center bg-no-repeat">
+          </div>
+          <!-- Top & Bottom Fade Masks to blend into background -->
+          <div class="absolute top-0 left-0 w-full h-[200px] bg-gradient-to-b from-[#161F48] via-[#161F48]/80 to-transparent z-10 pointer-events-none"></div>
+          <div class="absolute bottom-0 left-0 w-full h-[200px] bg-gradient-to-t from-[#161F48] via-[#161F48]/80 to-transparent z-10 pointer-events-none"></div>
+        </div>
+
+        <!-- Floating Glassmorphic Features -->
+        <div class="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col justify-center items-center gap-4 py-12 md:py-0 min-h-[50vh] md:min-h-[800px]">
+          <!-- Mobile: stacked layout. Desktop: absolute positioned floating layout -->
+
+          <div
+            class="relative md:absolute md:top-[55%] md:left-[5%] lg:left-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center anim-float-1"
+          >
+            <p class="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">Sector 1, Greater Noida West</p>
+          </div>
+
+          <div
+            class="relative md:absolute md:top-[50%] md:right-[5%] lg:right-[10%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center anim-float-2"
+          >
+            <p class="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">12-acre planned development</p>
+          </div>
+
+          <div
+            class="relative md:absolute md:top-[70%] md:left-[2%] lg:left-[8%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center anim-float-3"
+          >
+            <p class="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">~1375 apartments with low-density planning</p>
+          </div>
+
+          <div
+            class="relative md:absolute md:top-[65%] md:right-[5%] lg:right-[12%] bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center anim-float-4"
+          >
+            <p class="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">8 high-rise towers (G+45)</p>
+          </div>
+
+          <div
+            class="relative md:absolute md:bottom-[5%] md:left-1/2 md:-translate-x-1/2 bg-white/[0.15] backdrop-blur-xl border border-white/30 px-8 sm:px-12 py-3 sm:py-4 rounded-full shadow-[0_8px_32px_rgba(0,0,0,0.3)] w-full md:w-auto text-center anim-float-5"
+          >
+            <p class="text-white text-[14px] sm:text-base md:text-lg font-medium tracking-wide">2, 3, and 4 BHK residences</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Problems Section -->
+      <section class="relative w-full py-16 md:py-24 bg-hf-navy overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0 w-full h-full z-0 opacity-40">
+          <div class="w-full h-full bg-[url('./public/architectural-blueprint.png')] bg-cover bg-top bg-no-repeat mix-blend-screen"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+          <h2 class="text-[24px] sm:text-4xl lg:text-[2.75rem] font-semibold mb-16 max-w-4xl leading-tight text-white">
+            Why most luxury homes don&apos;t feel<br class="hidden sm:block" /> premium after possession?
+          </h2>
+
+          <div class="problems-grid grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
+            <!-- Item 1 -->
+            <div data-aos="fade-up" data-aos-delay="0" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-1.png" alt="Crowded towers" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Crowded<br class="hidden sm:block" /> towers</p>
+            </div>
+
+            <!-- Item 2 -->
+            <div data-aos="fade-up" data-aos-delay="100" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-2.png" alt="Inconsistent construction quality" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Inconsistent<br class="hidden sm:block" /> construction quality</p>
+            </div>
+
+            <!-- Item 3 -->
+            <div data-aos="fade-up" data-aos-delay="200" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-3.png" alt="Overpromised amenities" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Overpromised<br class="hidden sm:block" /> amenities</p>
+            </div>
+
+            <!-- Item 4 -->
+            <div data-aos="fade-up" data-aos-delay="0" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-4.png" alt="Execution delays" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">Execution<br class="hidden sm:block" /> delays</p>
+            </div>
+
+            <!-- Item 5 -->
+            <div data-aos="fade-up" data-aos-delay="100" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-5.png" alt="On paper, everything looks similar" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">On paper,<br class="hidden sm:block" /> everything looks similar.</p>
+            </div>
+
+            <!-- Item 6 -->
+            <div data-aos="fade-up" data-aos-delay="200" class="problem-item bg-gradient-to-br from-white/10 to-transparent backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-8 flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-start gap-3 sm:gap-6 hover:bg-white/10 transition-all duration-300 shadow-xl text-center sm:text-left">
+              <img src="./public/luxury-homes-icon-6.png" alt="In reality, very few projects deliver consistency" class="w-10 h-10 sm:w-14 sm:h-14 shrink-0 object-contain drop-shadow-md" />
+              <p class="text-[13px] sm:text-[1.15rem] font-medium leading-snug text-white">In reality, very few<br class="hidden sm:block" /> projects deliver consistency.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Get A Closer Look Section -->
+      <section class="closer-look-section relative w-full min-h-[60vh] md:min-h-[700px] py-16 md:py-24 flex items-center justify-center overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 w-full h-full z-0 opacity-10 bg-[url('./public/get-a-closer-look-bg.png')] bg-cover bg-top"></div>
+
+        <div class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6">
+          <div data-aos="fade-up" class="closer-look-card relative w-full rounded-2xl overflow-hidden shadow-2xl group border border-white/10 aspect-square sm:aspect-video lg:aspect-[2.2/1] flex flex-col items-center justify-center">
+            <!-- Middle Image as Background -->
+            <div class="absolute inset-0 w-full h-full">
+              <img src="./public/get-a-closer.jpg" alt="Layout Plan" class="object-cover" />
+            </div>
+
+            <div class="relative z-10 px-4 sm:px-6 flex flex-col items-center justify-center text-center">
+              <h2 class="text-[24px] sm:text-4xl md:text-[2.75rem] font-semibold mb-6 text-[#F4D068] drop-shadow-md">
+                Get A Closer Look
+              </h2>
+              <button
+                class="modal-open bg-[#4a5fbd] hover:bg-[#3a4ca0] text-white text-[14px] sm:text-base font-medium px-4 py-2 sm:px-8 sm:py-2.5 rounded-lg transition-colors shadow-lg"
+              >
+                Download layout
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Low Density Section -->
+      <section class="fade-up-section relative w-full py-16 md:py-24 border-t border-white/5 overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 w-full h-full z-0 opacity-10 bg-[url('./public/architectural-blueprint.png')] bg-cover bg-center mix-blend-screen"></div>
+
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+          <h2 data-aos="fade-down" class="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-16 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+            Low Density In A High-Growth<br class="hidden sm:block" /> Market
+          </h2>
+
+          <div data-aos="zoom-in" class="w-full max-w-5xl mx-auto mb-16">
+            <img src="./public/low-density.png" alt="Low Density Layout" class="w-full h-auto object-contain" />
+          </div>
+
+          <p data-aos="fade-up" class="text-[14px] sm:text-2xl font-medium text-white leading-snug">
+            Space Is No Longer A Given In NCR.<br>
+            Here, It Is Planned.
+          </p>
+        </div>
+      </section>
+
+      <!-- Daily Living Slider Section -->
+      <section class="fade-up-section relative w-full py-16 md:py-24 bg-[#161F48] overflow-hidden">
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 mb-8 sm:mb-16 text-center">
+          <h2 data-aos="fade-down" class="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold mb-2 sm:mb-6 bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+            Built For Daily Living, Not Just<br class="hidden sm:block" /> Brochure Value
+          </h2>
+        </div>
+
+        <div data-aos="fade-up" class="relative w-full max-w-[100vw] mx-auto overflow-hidden py-2 sm:py-8 px-2 md:px-0">
+          <!-- Desktop Slider -->
+          <div class="hidden md:block">
+            
+<div class="centric-slider desktop-slider">
+  <div class="outline-none"><div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-1.jpg" alt="Grand Clubhouse For Social And Private Use" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">Grand Clubhouse For Social And Private Use</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-2.jpg" alt="Swimming Pool, Fitness, And Wellness Zones" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">Swimming Pool, Fitness, And Wellness Zones</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-3.jpg" alt="Landscaped Greens And Walking Tracks" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">Landscaped Greens And Walking Tracks</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[16/9] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-4.jpg" alt="Sports Courts, Kids' Areas, And Leisure Spaces" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-10 left-10 right-10 text-white font-semibold text-[14px] sm:text-2xl lg:text-3xl leading-snug drop-shadow-md z-10 text-left">Sports Courts, Kids' Areas, And Leisure Spaces</p></div></div>
+</div>
+
+          </div>
+
+          <!-- Mobile Slider -->
+          <div class="block md:hidden">
+            
+<div class="mobile-slider">
+  <div class="outline-none"><div class="relative aspect-[4/3] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-1.jpg" alt="Grand Clubhouse For Social And Private Use" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-6 left-6 right-6 text-white font-semibold text-[16px] leading-snug drop-shadow-md z-10 text-left">Grand Clubhouse For Social And Private Use</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[4/3] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-2.jpg" alt="Swimming Pool, Fitness, And Wellness Zones" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-6 left-6 right-6 text-white font-semibold text-[16px] leading-snug drop-shadow-md z-10 text-left">Swimming Pool, Fitness, And Wellness Zones</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[4/3] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-3.jpg" alt="Landscaped Greens And Walking Tracks" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-6 left-6 right-6 text-white font-semibold text-[16px] leading-snug drop-shadow-md z-10 text-left">Landscaped Greens And Walking Tracks</p></div></div>
+  <div class="outline-none"><div class="relative aspect-[4/3] w-full rounded-2xl overflow-hidden group mx-auto"><img src="./public/daily-living-slider-4.jpg" alt="Sports Courts, Kids' Areas, And Leisure Spaces" class="object-cover transition-transform duration-700 group-hover:scale-105 w-full h-full" /><div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/90 via-[#161F48]/30 to-transparent"></div><p class="absolute bottom-6 left-6 right-6 text-white font-semibold text-[16px] leading-snug drop-shadow-md z-10 text-left">Sports Courts, Kids' Areas, And Leisure Spaces</p></div></div>
+</div>
+
+          </div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-4xl mx-auto px-4 sm:px-6 mt-8 sm:mt-16 text-center">
+          <p data-aos="fade-up" class="text-[14px] sm:text-2xl font-medium text-white leading-snug">
+            Everything Is Integrated Within The Development.<br>
+            You Don&apos;t Step Out For Basic Lifestyle Needs.
+          </p>
+        </div>
+      </section>
+
+      <!-- Scroll Animated Map Section -->
+      <section id="map-container" class="relative w-full min-h-screen bg-[#161F48] overflow-hidden flex flex-col justify-center items-center gap-6 sm:gap-12 py-16 md:py-24">
+
+        <!-- Canvas Background -->
+        <div class="absolute inset-0 w-full h-full z-0 opacity-60 mix-blend-screen pointer-events-none">
+          <canvas id="map-canvas" class="w-full h-full object-cover"></canvas>
+          <div class="absolute inset-0 bg-gradient-to-t from-[#161F48] via-transparent to-[#161F48]"></div>
+        </div>
+
+        <!-- Heading - sequence starts here -->
+        <div
+          id="map-heading" class="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 text-center pointer-events-none mt-4 sm:mt-10"
+        >
+          <h2 class="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+            Positioned In One Of NCR&apos;s Fastest-<br class="hidden sm:block" /> Evolving Residential Corridors
+          </h2>
+        </div>
+
+        <!-- Center Map Items Block -->
+        <div
+          id="map-pills" class="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 pointer-events-none"
+        >
+          <!-- Desktop Layout for Pins -->
+          <div class="hidden lg:flex w-full justify-between items-center relative h-full">
+
+            <!-- Left Column -->
+            <div class="flex flex-col gap-16 justify-center h-full items-start">
+              <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl ml-8 pointer-events-auto hover:bg-[#161F48]/60 transition-colors">
+                <p class="text-white text-lg font-medium text-center whitespace-nowrap">Close to Noida, Delhi, and Ghaziabad</p>
+              </div>
+              <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl -ml-8 pointer-events-auto hover:bg-[#161F48]/60 transition-colors">
+                <p class="text-white text-lg font-medium text-center whitespace-nowrap">Upcoming metro connectivity nearby</p>
+              </div>
+              <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl ml-8 pointer-events-auto hover:bg-[#161F48]/60 transition-colors">
+                <p class="text-white text-lg font-medium text-center whitespace-nowrap">Access to FNG Expressway and major road networks</p>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="flex flex-col justify-center h-full items-end">
+              <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-6 py-3 rounded-full shadow-2xl mr-8 pointer-events-auto hover:bg-[#161F48]/60 transition-colors">
+                <p class="text-white text-lg font-medium text-center whitespace-nowrap">Sector 1, Greater Noida West</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile Layout (simplified stack) -->
+          <div class="flex lg:hidden flex-col items-center gap-4 w-full justify-center mt-8 px-2">
+            <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p class="text-white font-medium text-[14px] sm:text-base">Close to Noida, Delhi, & Ghaziabad</p>
+            </div>
+            <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p class="text-white font-medium text-[14px] sm:text-base">Upcoming metro connectivity nearby</p>
+            </div>
+            <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p class="text-white font-medium text-[14px] sm:text-base">Access to FNG Expressway</p>
+            </div>
+            <div class="bg-[#161F48]/40 backdrop-blur-md border border-white/30 px-5 py-3 rounded-2xl sm:rounded-full shadow-xl pointer-events-auto text-center w-[95%] sm:w-auto">
+              <p class="text-white font-medium text-[14px] sm:text-base">Sector 1, Greater Noida West</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Paragraph -->
+        <div
+          id="map-para" class="relative z-20 w-full max-w-4xl mx-auto px-4 sm:px-6 text-center mb-4 sm:mb-10 pointer-events-none"
+        >
+          <p class="text-[14px] sm:text-2xl lg:text-3xl font-medium text-white leading-snug drop-shadow-md">
+            This Location Is Driven By Expansion, Not Saturation.<br class="hidden sm:block" />
+            That Matters For Both Living And Appreciation.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- We Help Section -->
+      <section id="help-section" class="relative w-full bg-[#161F48] overflow-hidden py-16 md:py-24">
+
+        <!-- Background Image -->
+        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-40 mix-blend-screen">
+          <img src="./public/we-help-blueprint.png" alt="Blueprint Background" class="object-cover object-center" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#161F48] via-transparent to-[#161F48]"></div>
+        </div>
+
+        <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+          <!-- Heading -->
+          <div
+            id="help-heading" class="text-center mb-12 lg:mb-16"
+          >
+            <h2 class="text-[24px] sm:text-4xl md:text-[3.5rem] leading-tight font-semibold bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent drop-shadow-md">
+              We Help You Choose Within The<br class="hidden sm:block" /> Project, Not Just The Project
+            </h2>
+          </div>
+
+          <!-- Two Column Content -->
+          <div class="flex flex-col lg:flex-row w-full items-center justify-center gap-12 lg:gap-4 max-w-5xl mx-auto">
+
+            <!-- Left Column (Pills) -->
+            <div id="help-pills" class="flex flex-col gap-4 lg:gap-6 w-full lg:w-7/12 px-2 sm:px-0">
+              <div class="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-8 hover:bg-white/5 transition-colors">
+                <p class="text-white text-[14px] sm:text-base lg:text-lg font-medium">Unit selection based on yield potential</p>
+              </div>
+              <div class="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:-ml-4 hover:bg-white/5 transition-colors">
+                <p class="text-white text-[14px] sm:text-base lg:text-lg font-medium">Price benchmarking across towers and phases</p>
+              </div>
+              <div class="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-2 hover:bg-white/5 transition-colors">
+                <p class="text-white text-[14px] sm:text-base lg:text-lg font-medium">Future value and resale positioning</p>
+              </div>
+              <div class="w-[95%] sm:w-fit bg-transparent backdrop-blur-md border border-white/30 px-6 py-3 rounded-2xl sm:rounded-full shadow-2xl lg:ml-12 hover:bg-white/5 transition-colors">
+                <p class="text-white text-[14px] sm:text-base lg:text-lg font-medium">End-to-end support till closure</p>
+              </div>
+            </div>
+
+            <!-- Right Column (Image) -->
+            <div class="w-full lg:w-5/12 flex justify-center lg:justify-start relative mt-8 lg:mt-0 lg:-ml-8 px-6 sm:px-0">
+              <img src="./public/we-help-right.png" id="help-image" alt="Real Estate Agents" class="object-contain w-[80%] sm:w-[60%] lg:w-full h-auto drop-shadow-2xl relative z-10" />
+              <!-- Full Width Gradient Mask for Image Baseline -->
+              <div class="absolute bottom-[-2px] left-[-100vw] right-[-100vw] h-24 sm:h-40 bg-gradient-to-t from-[#161F48] via-[#161F48]/80 to-transparent pointer-events-none z-20"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Paragraph -->
+          <div
+            id="help-para" class="text-center mt-12 lg:mt-16"
+          >
+            <p class="text-[14px] sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
+              No Generic Recommendations.<br class="hidden sm:block" />
+              Only What Fits Your Objective.
+            </p>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Decisions Matter Section -->
+      <section class="decisions-section w-full bg-[#161F48] py-16 md:py-24 flex flex-col items-center justify-center overflow-hidden">
+        <!-- Heading -->
+        <div data-aos="fade-down" class="decisions-content text-center px-4 sm:px-6 mb-8 max-w-5xl mx-auto">
+          <h2 class="text-[24px] sm:text-3xl lg:text-[2.5rem] font-semibold text-white leading-tight">
+            If You Are Considering Sobha Rivana, Early<br class="hidden sm:block" /> Decisions Matter.
+          </h2>
+        </div>
+
+        <!-- Buttons -->
+        <div data-aos="fade-up" class="decisions-content flex flex-col sm:flex-row gap-4 sm:gap-6 px-4 sm:px-6 z-10 relative">
+          <button
+            class="modal-open px-4 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-[14px] sm:text-base w-full sm:w-auto min-w-[160px]"
+          >
+            Get Pricing
+          </button>
+          <button
+            class="modal-open px-4 py-2 sm:px-8 sm:py-3.5 rounded-xl bg-[#4A5EBF] hover:bg-[#3B4C9D] text-white font-semibold shadow-xl transition-colors text-[14px] sm:text-base w-full sm:w-auto min-w-[160px]"
+          >
+            Schedule a call
+          </button>
+        </div>
+
+        <!-- Image -->
+        <div data-aos="zoom-in" class="w-full relative px-0 flex justify-center ">
+          <img src="./public/decisions-matter-bg.png" alt="City Skyline Graph" class="w-full max-w-[1920px] h-auto object-cover opacity-90" />
+        </div>
+
+        <!-- Bottom Text -->
+        <div data-aos="fade-up" class="decisions-content text-center px-4 sm:px-6 mt-12 z-10 relative">
+          <p class="text-[14px] sm:text-2xl font-medium text-white leading-snug drop-shadow-md">
+            No Generic Recommendations.<br class="hidden sm:block" />
+            Only What Fits Your Objective.
+          </p>
+        </div>
+      </section>
+
+      <!-- Contact Section -->
+      <section class="contact-section w-full bg-[#161F48] py-16 md:py-24 px-4 sm:px-6 border-t border-white/5">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-stretch justify-center">
+
+          <!-- Left Column (Image & Overlay Text) -->
+          <div data-aos="fade-right" class="contact-image w-full lg:w-1/2 relative min-h-[400px] lg:min-h-full rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <img src="./public/contact.jpg" alt="Living Room" class="object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-[#161F48]/95 via-[#161F48]/30 to-transparent"></div>
+
+            <div class="absolute bottom-0 left-0 w-full px-4 py-4 sm:p-12">
+              <h3 class="text-[24px] sm:text-3xl lg:text-4xl font-semibold text-white leading-snug drop-shadow-lg">
+                A Well-Built Home Is Not Obvious<br>
+                On Day One.<br>
+                It Becomes Clear Over Time.
+              </h3>
+            </div>
+          </div>
+
+          <!-- Right Column (Form) -->
+          <div data-aos="fade-left" class="contact-form w-full lg:w-5/12 flex flex-col justify-center py-6">
+            <form class="flex flex-col gap-3 sm:gap-6">
+
+              <div>
+                <div class="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
+                  
+                    <span class="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                      Name
+                    </span>
+                  
+                  <input
+                    type="text"
+                    id="contact-name"
+                    class="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
+                  />
+                </div>
+                
+              </div>
+
+              <div>
+                <div class="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
+                  
+                    <span class="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                      Email
+                    </span>
+                  
+                  <input
+                    type="email"
+                    id="contact-email"
+                    class="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
+                  />
+                </div>
+                
+              </div>
+
+              <div>
+                <div class="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
+                  
+                    <span class="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                      Phone No.
+                    </span>
+                  
+                  <input
+                    type="tel"
+                    id="contact-mobile"
+                    class="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors"
+                  />
+                </div>
+                
+              </div>
+
+              <div>
+                <div class="relative rounded-xl p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2">
+                  
+                    <span class="absolute left-[13px] top-[11px] sm:left-[21px] sm:top-[17px] text-[14px] sm:text-base pointer-events-none bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">
+                      Fill in your requirements
+                    </span>
+                  
+                  <textarea
+                    id="contact-requirements"
+                    rows="4"
+                    class="w-full block bg-[#161F48] rounded-[11px] px-3 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-base text-white outline-none transition-colors resize-none"
+                  ></textarea>
+                </div>
+                
+              </div>
+
+              <div class="flex justify-center mt-2">
+                <button
+                  type="submit"
+                  class="px-4 py-2 sm:px-12 sm:py-3.5 bg-[#00474E] hover:bg-[#005e66] text-white text-[13px] sm:text-base font-medium rounded-lg transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed w-full sm:w-48"
+                >
+                  Submit
+                </button>
+              </div>
+
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Footer Section -->
+      <footer class="fade-up-section relative w-full bg-[#161F48] pt-12 pb-24 sm:pt-16 sm:pb-32 px-4 sm:px-6 overflow-hidden min-h-[300px] flex items-center">
+
+        <!-- Layer 1: Giant Watermark Background -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center pointer-events-none select-none z-0">
+          <span class="text-[14vw] sm:text-[160px] md:text-[200px] lg:text-[280px] font-semibold text-[#CCA14D]/30 leading-none tracking-[0.22em] whitespace-nowrap lowercase">
+            realtors
+          </span>
+        </div>
+
+        <!-- Layer 2: Bottom Gradient Fade (masks the bottom half of the watermark) -->
+        <div class="absolute bottom-0 left-0 w-full h-[200px] sm:h-[250px] bg-gradient-to-b from-[#161F48]/0 to-[#161F48] pointer-events-none z-0"></div>
+
+        <div class="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-between gap-10 lg:gap-6">
+
+          <!-- Logo -->
+          <div class="w-56 sm:w-64 shrink-0 flex justify-center lg:justify-start">
+            <img src="./public/hf-realtor-logo.png" alt="Head Field Realtors" class="w-full h-auto object-contain" />
+          </div>
+
+          <!-- Links -->
+          <nav class="flex flex-col gap-2 items-center lg:items-start text-center lg:text-left shrink-0">
+            <a href="#" class="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">About Head Field</a>
+            <a href="#" class="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Our Expertise</a>
+            <a href="#" class="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Our Approach</a>
+            <a href="#" class="text-white/90 hover:text-hf-gold transition-colors text-[14px] sm:text-base font-medium">Contact</a>
+          </nav>
+
+          <!-- Social Icons -->
+          <div class="relative flex gap-5 items-center justify-center shrink-0 py-6">
+            <a href="#" class="text-hf-gold hover:text-hf-gold-2 transition-colors">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+              </svg>
+            </a>
+            <a href="#" class="text-hf-gold hover:text-hf-gold-2 transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+              </svg>
+            </a>
+            <a href="#" class="text-hf-gold hover:text-hf-gold-2 transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+            </a>
+          </div>
+
+          <!-- Contact Pills -->
+          <div class="flex flex-col gap-4 shrink-0 w-full sm:w-auto">
+            <div class="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
+              <a href="mailto:info@hfrealtors.com" class="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-4 py-2 sm:px-8 sm:py-2.5 text-white/90 hover:text-white transition-colors text-[14px] sm:text-base font-medium w-full lg:w-[240px]">
+                <i data-lucide="mail"  class="w-5 h-5 shrink-0 text-hf-gold" stroke-width="2" ></i>
+                info@hfrealtors.com
+              </a>
+            </div>
+
+            <div class="rounded-full p-[1px] bg-gradient-to-b from-hf-gold to-hf-gold-2 shadow-lg">
+              <a href="tel:9999991036" class="flex items-center justify-center gap-3 bg-[#161F48] rounded-full px-4 py-2 sm:px-8 sm:py-2.5 text-white/90 hover:text-white transition-colors text-[14px] sm:text-base font-medium w-full lg:w-[240px]">
+                <i data-lucide="phone"  class="w-5 h-5 shrink-0 text-hf-gold" stroke-width="2" ></i>
+                9999991036
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </footer>
+
+      
+        <div id="modal-overlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity">
+          <div class="relative w-full max-w-md bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl md:rounded-[2rem] p-5 sm:p-6 md:p-8 shadow-2xl">
+            <button
+              id="modal-close"
+              class="absolute z-3 top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white/70 hover:text-white transition-all duration-300 cursor-pointer"
+            >
+              <i data-lucide="x"  class="w-5 h-5" ></i>
+            </button>
+
+            <h2 class="text-[22px] sm:text-2xl font-semibold text-center mt-6 sm:mt-0 mb-5 sm:mb-6 px-4 sm:px-0 drop-shadow-md bg-gradient-to-b from-hf-gold to-hf-gold-2 bg-clip-text text-transparent">Own a Premium Address</h2>
+
+            <form class="flex flex-col gap-3 sm:gap-4">
+              <div>
+                <input
+                  type="text"
+                  id="modal-name"
+                  placeholder="Name"
+                  class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                />
+                
+              </div>
+
+              <div>
+                <input
+                  type="tel"
+                  id="modal-mobile"
+                  placeholder="Mobile No."
+                  class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                />
+                
+              </div>
+
+              <div>
+                <input
+                  type="email"
+                  id="modal-email"
+                  placeholder="Email"
+                  class="w-full bg-transparent border border-white/40 focus:border-white rounded-xl px-3 py-2.5 sm:px-4 sm:py-3.5 text-[14px] sm:text-base text-white placeholder-white/70 outline-none transition-colors"
+                />
+                
+              </div>
+
+              <button
+                type="submit"
+                class="w-[80%] sm:w-1/2 mx-auto mt-2 bg-sobha-rivana hover:brightness-110 text-[13px] sm:text-base text-white font-medium py-2.5 sm:py-3.5 rounded-xl transition-colors shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                Submit
+              </button>
+            </form>
+        </div>
+        </div>
+
+    </main>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- GSAP & ScrollTrigger -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<!-- jQuery & Slick -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<!-- EmailJS -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<!-- Custom JS -->
+<script src="./script.js"></script>
+</body>
+</html>

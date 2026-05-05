@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - Sobha Rivana</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        'hf-navy': '#161F48',
+                        'hf-royal-blue': '#163548',
+                        'hf-gold': '#CCA14D',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="min-h-full font-sans bg-[#161F48] text-white">
+    <main class="min-h-screen bg-hf-navy text-white flex items-center justify-center font-sans">
+      <div class="bg-[#163548]/50 backdrop-blur-md border border-[#CCA14D]/30 p-12 rounded-3xl text-center max-w-lg mx-4">
+        <i data-lucide="check-circle" class="w-20 h-20 text-[#CCA14D] mx-auto mb-6"></i>
+        <h1 class="font-serif text-4xl mb-4">Thank You!</h1>
+        <p class="text-gray-300 mb-8 font-light tracking-wide text-lg">
+          Your inquiry has been successfully submitted. One of our premium property advisors will contact you shortly.
+        </p>
+        <a 
+          href="./index.html" 
+          class="inline-block bg-[#CCA14D] text-[#161F48] px-8 py-3 rounded-full font-medium hover:bg-white transition-colors duration-300"
+        >
+          Return Home
+        </a>
+      </div>
+    </main>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
+</body>
+</html>
